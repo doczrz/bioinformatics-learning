@@ -31,7 +31,10 @@ export class StaticContentProvider implements ContentProvider {
   private readonly root: URL;
   private readonly fetcher: Fetcher;
 
-  constructor(baseUrl: string | URL, fetcher: Fetcher = fetch) {
+  constructor(
+    baseUrl: string | URL,
+    fetcher: Fetcher = (input, init) => globalThis.fetch(input, init),
+  ) {
     this.root = new URL("./", baseUrl);
     this.fetcher = fetcher;
   }

@@ -134,7 +134,8 @@ export class ContentUpdateService implements ContentUpdateClient {
     this.uiVersion = options.uiVersion;
     this.courseId = options.courseId;
     this.cache = options.cache;
-    this.fetcher = options.fetcher ?? fetch;
+    this.fetcher =
+      options.fetcher ?? ((input, init) => globalThis.fetch(input, init));
     this.crypto = options.crypto ?? globalThis.crypto;
   }
 
