@@ -1,4 +1,5 @@
 import type { CourseIndex, Language } from "../contracts";
+import type { RunnerStatus } from "../runtime/execution-runner";
 import { EnvironmentStatus } from "./EnvironmentStatus";
 
 interface LessonSidebarProps {
@@ -8,6 +9,7 @@ interface LessonSidebarProps {
   open: boolean;
   onSelectLesson: (lessonId: string) => void;
   onClose: () => void;
+  environmentStatus: RunnerStatus;
 }
 
 export function LessonSidebar({
@@ -17,6 +19,7 @@ export function LessonSidebar({
   open,
   onSelectLesson,
   onClose,
+  environmentStatus,
 }: LessonSidebarProps) {
   const isChinese = language === "zh";
   return (
@@ -52,7 +55,7 @@ export function LessonSidebar({
           ))}
         </ol>
       </nav>
-      <EnvironmentStatus language={language} />
+      <EnvironmentStatus language={language} status={environmentStatus} />
     </aside>
   );
 }
