@@ -7,6 +7,7 @@ __pycache__/
 node_modules/
 dist/
 .course-state/
+.course-cache/
 my-notes/
 /START_HERE.md
 /COURSE_STATUS.md

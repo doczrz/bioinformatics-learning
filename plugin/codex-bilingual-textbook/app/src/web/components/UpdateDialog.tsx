@@ -57,7 +57,7 @@ export function UpdateDialog({
           </button>
         </div>
 
-        {!result.configured ? (
+        {error ? null : !result.configured ? (
           <p>{isChinese ? "尚未配置在线内容仓库。" : "Online course updates are not configured."}</p>
         ) : !result.updateAvailable ? (
           <p>{isChinese ? "当前已经是最新版本。" : "The course is already up to date."}</p>
