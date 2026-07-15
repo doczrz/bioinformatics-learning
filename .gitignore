@@ -1,6 +1,8 @@
 .superpowers/
 .openai-docs-cache/
 .worktrees/
+__pycache__/
+*.py[cod]
 .course-state/
 my-notes/
 /START_HERE.md

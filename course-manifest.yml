@@ -1,0 +1,10 @@
+schema_version: 1
+course:
+  id: codex-bilingual-textbook
+  version: 0.1.0
+  default_language: zh
+  title:
+    zh: 双语交互教材
+    en: Bilingual Interactive Textbook
+  remote_manifest_url: null
+lessons: []
