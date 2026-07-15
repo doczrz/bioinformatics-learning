@@ -22,7 +22,8 @@ The plugin must use the host conversation through the MCP Apps bridge. It must n
 - Submission to the host conversation through `ui/message` or its documented compatibility API.
 - Current lesson context supplied through the MCP Apps bridge.
 - Content-neutral authoring structure so subject matter can be rearranged later.
-- Versioned content manifests and frequent content-only updates.
+- A user-confirmed update button backed by a public GitHub content repository.
+- Versioned content manifests and frequent content-only updates without republishing the plugin.
 - Existing `bilingual-textbook` Skill packaged with the app.
 
 ### Version 1 excludes
@@ -37,7 +38,7 @@ The plugin must use the host conversation through the MCP Apps bridge. It must n
 ## 3. Recommended Architecture
 
 ```text
-Codex plugin package
+Private Codex plugin source repository
 ├── .codex-plugin/plugin.json
 ├── .app.json                         # added after a developer-mode app ID exists
 ├── skills/bilingual-textbook/
@@ -47,19 +48,21 @@ Codex plugin package
     ├── web/                          # React + TypeScript widget
     └── content/                      # development fixtures only
 
-Author-owned course repository
+Public GitHub course-content repository
 ├── course-manifest.yml
 ├── chapters/zh/*.md
 ├── chapters/en/*.md
 ├── datasets/catalog.yml
 ├── figures/
-└── Python validation/update tooling
+├── releases/<version>/
+├── latest.yml
+└── Python validation/release tooling
 
-Hosted content channel
-├── versioned manifest
-├── lesson payloads
-├── image assets
-└── cache metadata (ETag/version)
+GitHub Releases content channel
+├── immutable lesson and image assets by tag
+├── bilingual change summary
+├── SHA-256 file manifest
+└── minimum compatible plugin version
 ```
 
 ### Technology choices
@@ -67,8 +70,9 @@ Hosted content channel
 - **Widget:** React, TypeScript, and Vite.
 - **MCP runtime:** Node.js and TypeScript, starting from the smallest matching official Apps SDK example.
 - **Authoring pipeline:** Keep Markdown, YAML, and the existing Python validators.
-- **Content delivery:** The MCP server reads a versioned content channel; changing lessons does not require rebuilding the UI plugin.
+- **Content delivery:** The MCP server reads public GitHub Release manifests and immutable assets; changing lessons does not require rebuilding the UI plugin.
 - **Dataset delivery:** Store only metadata and authoritative external download links. Never proxy large datasets through the textbook service.
+- **Source visibility:** Course content is public. Plugin source remains private until the author chooses to publish it.
 
 This separation keeps UI code stable while allowing the author to update lessons every two to five days.
 
@@ -140,6 +144,7 @@ The UI uses a restrained textbook visual system rather than a dashboard aestheti
 | `get_lesson` | Return one lesson by stable ID and language | read-only, idempotent |
 | `get_dataset_catalog` | Return external dataset metadata | read-only, idempotent, open-world links |
 | `check_course_update` | Compare visible content versions | read-only, idempotent, open-world network |
+| `apply_course_update` | Fetch, verify, cache, and activate an explicitly confirmed content version | idempotent, non-destructive, open-world network |
 
 The Ask Codex action uses the UI bridge, not a custom `ask_model` MCP tool. Language and transient reading state use widget state in version 1.
 
@@ -158,13 +163,47 @@ Every component-initiated request includes the current course version and lesson
 
 ## 8. Content Update Model
 
-The plugin UI and MCP schemas change slowly. Course text changes frequently.
+The plugin UI and MCP schemas change slowly. Course text changes frequently. The public course-content repository and private plugin-source repository have independent release cycles.
+
+### GitHub release contract
+
+The public content repository exposes a stable `latest.yml` pointer. Each content version is also published as an immutable GitHub Release or commit-addressed release directory. The latest manifest contains:
+
+- content schema version;
+- semantic course version;
+- immutable Git commit or release tag;
+- minimum compatible plugin version;
+- bilingual change summary;
+- asset URLs;
+- expected file sizes and SHA-256 checksums.
+
+No GitHub token is shipped in the widget or required for public content.
+
+### Author release flow
 
 1. The author edits paired Markdown lessons and the YAML manifests.
 2. Existing Python validation checks IDs, translation pairs, links, code fences, and image metadata.
-3. A content release publishes a new semantic version and immutable lesson payloads.
-4. The MCP server observes the new manifest, validates it, and refreshes its cache.
-5. Existing users see an update indicator and can refresh content without reinstalling the plugin.
+3. Release tooling generates checksums and the bilingual change summary.
+4. A tagged GitHub content release publishes immutable lesson and image assets.
+5. `latest.yml` is advanced only after the release passes validation.
+
+### Learner update flow
+
+1. The learner presses **检查更新 / Check for updates**.
+2. The widget calls `check_course_update` and displays the target version, bilingual change summary, download size, and compatibility result.
+3. The learner explicitly presses **更新到 <version> / Update to <version>**.
+4. The widget calls `apply_course_update` with that exact version.
+5. The MCP server fetches assets from the immutable GitHub Release, validates the schema, checks every SHA-256 digest, and writes a staging cache.
+6. After all checks pass, the server atomically changes the active content pointer and retains the previous known-good version for rollback.
+7. The widget reloads the current lesson by stable lesson ID in the active language and reports the installed content version.
+
+The update button does not execute `git pull` on the learner's computer. Users do not need Git, a local clone, or a GitHub account.
+
+### Content update versus plugin update
+
+- Lesson text, images, course ordering, citations, and external dataset links use the content update flow and do not require plugin republishing.
+- React UI code, MCP tool schemas, permissions, execution interfaces, or the bundled Skill require a plugin release.
+- If `minimum compatible plugin version` is newer than the installed plugin, the content update is not applied; the UI explains that a plugin update is required.
 
 If a new manifest or lesson is invalid, the server keeps the last known good version and reports a non-blocking update error.
 
@@ -174,6 +213,7 @@ If a new manifest or lesson is invalid, the server keeps the last known good ver
 - **Content network failure:** use the last known good cached lesson and show its version and cache time.
 - **Missing translation:** show a clear untranslated-state page with a route back; never render the other language under the selected language label.
 - **Invalid content payload:** reject it server-side and retain the previous version.
+- **Checksum or compatibility failure:** keep the current version active, delete the staging cache, and show the exact failed validation category.
 - **External dataset link failure:** show source metadata and a warning; never substitute an unverified mirror automatically.
 - **Unsupported client surface:** return a model-readable Markdown summary when the embedded UI cannot render.
 
@@ -183,6 +223,8 @@ If a new manifest or lesson is invalid, the server keeps the last known good ver
 - Configure the narrowest Apps SDK CSP for content, image, and connection domains.
 - Use host-supported external-link APIs for dataset and source links.
 - Do not include OpenAI API keys in the widget or request them from Plus users.
+- Do not include GitHub credentials in the widget; public content updates use anonymous read-only requests.
+- Do not run `git pull` or mutate a learner's source checkout from the update button.
 - Do not send selected text until the learner explicitly presses Send.
 - Keep `structuredContent` concise and model-readable; keep UI-only payloads in `_meta`.
 - Do not register version 1 R or SSH tools.
@@ -195,6 +237,7 @@ If a new manifest or lesson is invalid, the server keeps the last known good ver
 - Unit tests for selection extraction, selection-length limits, and message formatting.
 - Component tests for language switching, selection action positioning, composer cancellation, retry behavior, and missing translations.
 - MCP contract tests for schemas, annotations, structured content, resource metadata, and content-version handling.
+- Update tests for exact-version confirmation, checksum failure, plugin compatibility, atomic activation, rollback, and interrupted downloads.
 - Content tests using the existing external Python test harness.
 - Build, typecheck, lint, and static CSP/resource validation.
 
@@ -211,7 +254,7 @@ If a new manifest or lesson is invalid, the server keeps the last known good ver
 1. **Interactive prototype:** React widget, local MCP server, fixtures, language switching, and selection composer.
 2. **Developer Mode integration:** expose `/mcp` through HTTPS, create the developer-mode app, and verify `ui/message` in the Codex desktop surface.
 3. **Plugin packaging:** scaffold `.codex-plugin/plugin.json`, add the app ID in `.app.json`, bundle the Skill, and add a personal marketplace entry.
-4. **Content channel:** connect the hosted manifest, caching, validation, and frequent-update workflow.
+4. **Content channel:** connect the public GitHub Release manifest, exact-version confirmation, caching, checksum validation, atomic activation, and rollback workflow.
 5. **Distribution preparation:** validate permissions, privacy policy, screenshots, support information, test cases, and plugin submission requirements.
 
 The developer-mode app ID is not invented or committed as a placeholder. It is added only after the app has been created in the user's ChatGPT Developer Mode account.
@@ -222,4 +265,3 @@ The developer-mode app ID is not invented or committed as a placeholder. It is a
 - Building MCP-backed apps inside plugins: <https://learn.chatgpt.com/docs/build-app>
 - Apps SDK bridge, `ui/message`, tool calls, and model-context updates: <https://developers.openai.com/apps-sdk/reference>
 - Building the widget UI: <https://developers.openai.com/apps-sdk/build/chatgpt-ui>
-
