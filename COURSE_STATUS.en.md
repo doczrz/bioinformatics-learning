@@ -4,15 +4,15 @@
 
 ## Textbook update
 
-- Current version: $current_version
-- Latest version: $latest_version
-- Last checked: $checked_at
-- Status: $update_kind
-- Detail: $update_detail
+- Current version: 0.1.0
+- Latest version: Unknown
+- Last checked: Not checked
+- Status: unknown
+- Detail: Updates have not been checked
 
 ### Change summary
 
-$changes
+No changes to display.
 
 An update runs only after user confirmation. `.course-state/`, `my-notes/`, and downloaded data must not be overwritten.
 

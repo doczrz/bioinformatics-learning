@@ -1,16 +1,16 @@
-# $course_title
+# Bilingual Interactive Textbook
 
 [中文](START_HERE.zh.md) · [Datasets](datasets/CATALOG.en.md) · [Updates and environment](COURSE_STATUS.en.md)
 
-> Content version: $version
+> Content version: 0.1.0
 
 ## Continue learning
 
-$continue_block
+No learning progress has been recorded.
 
 ## Course outline
 
-$lesson_table
+No lessons have been published.
 
 ## Execution interfaces
 

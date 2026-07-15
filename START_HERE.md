@@ -1,16 +1,16 @@
-# $course_title
+# 双语交互教材
 
 [English](START_HERE.en.md) · [数据清单](datasets/CATALOG.zh.md) · [更新与环境状态](COURSE_STATUS.zh.md)
 
-> 内容版本：$version
+> 内容版本：0.1.0
 
 ## 继续学习
 
-$continue_block
+尚未记录学习进度。
 
 ## 课程目录
 
-$lesson_table
+尚未发布章节。
 
 ## 执行接口
 
