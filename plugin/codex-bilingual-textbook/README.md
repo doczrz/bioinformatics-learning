@@ -7,7 +7,7 @@ Private plugin bundle for an embedded Chinese-English textbook reader. The UI so
 - Opens as an MCP App resource inside a supported Codex/ChatGPT host.
 - Switches the complete interface and lesson between Chinese and English.
 - Lets learners select prose or code, add a question, and explicitly send it to the current Codex conversation.
-- Shows Local R and SSH/HPC as disabled future interfaces; version 1 does not execute code.
+- Shows Local R, Local Python, and SSH/HPC as disabled future interfaces; version 1 does not execute code.
 - Checks and installs user-confirmed public content releases with size and SHA-256 verification.
 - Keeps dataset binaries outside the plugin and course-content release.
 

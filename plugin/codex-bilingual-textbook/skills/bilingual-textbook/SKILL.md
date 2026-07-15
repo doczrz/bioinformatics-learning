@@ -11,4 +11,4 @@ Selection-originated questions include the course version, lesson ID, section, l
 
 Use `check_course_update` only after the learner presses the update check control. Use `apply_course_update` only for the exact version the learner explicitly confirms. Course updates fetch public, immutable content releases and never run `git pull`.
 
-Treat local R and SSH/HPC execution as unavailable in version 1. Do not claim that code was executed.
+Treat Local R, Local Python, and SSH/HPC as reserved, unavailable interfaces in version 1. Do not claim that code was executed.

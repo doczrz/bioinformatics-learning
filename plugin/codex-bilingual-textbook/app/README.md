@@ -51,6 +51,8 @@ Author-side release artifacts are generated from the repository root with `cours
 
 ## Explicitly absent in version 1
 
+Local R, Local Python, and SSH/HPC are reserved interfaces only; all three are disabled and execute nothing.
+
 - OpenAI API key prompts
 - GitHub credentials
 - R/Python execution tools

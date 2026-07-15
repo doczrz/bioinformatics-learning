@@ -15,7 +15,7 @@ export interface CourseIndex {
   title: Record<Language, string>;
   lessons: LessonSummary[];
   environments: Array<{
-    id: "local-r" | "ssh-hpc";
+    id: "local-r" | "local-python" | "ssh-hpc";
     status: "reserved";
   }>;
 }
