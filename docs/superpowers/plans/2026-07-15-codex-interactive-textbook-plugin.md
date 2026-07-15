@@ -117,7 +117,7 @@ Use the canonical scaffold field names and add only the plugin metadata supporte
   "react": "^19.1.1",
   "react-dom": "^19.1.1",
   "react-markdown": "^10.1.0",
-  "rehype-sanitize": "^6.0.2",
+  "rehype-sanitize": "^6.0.0",
   "remark-gfm": "^4.0.1",
   "zod": "^3.24.4"
 }
