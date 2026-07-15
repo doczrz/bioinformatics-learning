@@ -39,7 +39,7 @@ def parser() -> ArgumentParser:
     release.add_argument("--version", required=True)
     release.add_argument("--release-tag", required=True)
     release.add_argument("--commit-sha", required=True)
-    release.add_argument("--minimum-plugin-version", required=True)
+    release.add_argument("--minimum-ui-version", required=True)
     release.add_argument("--summary-zh", required=True)
     release.add_argument("--summary-en", required=True)
     release.add_argument("--asset-base-url", required=True)
@@ -116,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
                 version=args.version,
                 release_tag=args.release_tag,
                 commit_sha=args.commit_sha,
-                minimum_plugin_version=args.minimum_plugin_version,
+                minimum_ui_version=args.minimum_ui_version,
                 summary_zh=args.summary_zh,
                 summary_en=args.summary_en,
                 asset_base_url=args.asset_base_url,

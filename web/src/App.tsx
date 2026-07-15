@@ -17,12 +17,14 @@ import {
   type BrowserStateStore,
   type ReaderState,
 } from "./state/browser-state-store";
+import type { ContentUpdateClient } from "./updates/update-service";
 import "./styles/tokens.css";
 import "./styles/textbook.css";
 
 interface TextbookAppProps {
   contentProvider: ContentProvider;
   stateStore: BrowserStateStore;
+  updateService?: ContentUpdateClient;
 }
 
 type Theme = "light" | "dark";
@@ -35,7 +37,11 @@ function preferredTheme(): Theme {
     : "light";
 }
 
-export function TextbookApp({ contentProvider, stateStore }: TextbookAppProps) {
+export function TextbookApp({
+  contentProvider,
+  stateStore,
+  updateService,
+}: TextbookAppProps) {
   const initialState = useMemo(() => stateStore.read(), [stateStore]);
   const [readerState, setReaderState] = useState<ReaderState>(initialState);
   const [course, setCourse] = useState<CourseIndex | null>(null);
@@ -44,6 +50,9 @@ export function TextbookApp({ contentProvider, stateStore }: TextbookAppProps) {
   const [error, setError] = useState<string | null>(null);
   const [theme, setTheme] = useState<Theme>(preferredTheme);
   const [updateResult, setUpdateResult] = useState<UpdateCheckResult | null>(null);
+  const [checkingForUpdates, setCheckingForUpdates] = useState(false);
+  const [applyingUpdate, setApplyingUpdate] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
   const requestSequence = useRef(0);
 
   const persistState = useCallback(
@@ -148,6 +157,63 @@ export function TextbookApp({ contentProvider, stateStore }: TextbookAppProps) {
     });
   }
 
+  async function checkForUpdates() {
+    if (!course || checkingForUpdates) return;
+    setCheckingForUpdates(true);
+    setUpdateError(null);
+    try {
+      const result = updateService
+        ? await updateService.check(course.contentVersion)
+        : {
+            configured: false,
+            updateAvailable: false,
+            currentVersion: course.contentVersion,
+          };
+      setUpdateResult(result);
+    } catch (caught) {
+      setUpdateResult({
+        configured: true,
+        updateAvailable: false,
+        currentVersion: course.contentVersion,
+      });
+      setUpdateError(
+        caught instanceof Error ? caught.message : "Could not check for updates.",
+      );
+    } finally {
+      setCheckingForUpdates(false);
+    }
+  }
+
+  async function applyUpdate(targetVersion: string) {
+    if (!course || !lesson || !updateService || applyingUpdate) return;
+    setApplyingUpdate(true);
+    setUpdateError(null);
+    try {
+      await updateService.apply(course.contentVersion, targetVersion);
+      await contentProvider.refresh();
+      const nextCourse = await contentProvider.getCourse();
+      if (nextCourse.contentVersion !== targetVersion) {
+        throw new Error("The activated course version does not match the checked update.");
+      }
+      setCourse(nextCourse);
+      const nextLessonId = nextCourse.lessons.some((item) => item.id === lesson.lessonId)
+        ? lesson.lessonId
+        : nextCourse.lessons[0]?.id;
+      if (!nextLessonId) throw new Error("The updated course does not contain any lessons.");
+      await loadLesson(nextCourse, nextLessonId, readerState.language, {
+        ...readerState,
+        lessonId: nextLessonId,
+      });
+      setUpdateResult(null);
+    } catch (caught) {
+      setUpdateError(
+        caught instanceof Error ? caught.message : "Could not apply the update.",
+      );
+    } finally {
+      setApplyingUpdate(false);
+    }
+  }
+
   if (!course || !lesson) {
     return (
       <main
@@ -172,14 +238,8 @@ export function TextbookApp({ contentProvider, stateStore }: TextbookAppProps) {
         onToggleSidebar={() =>
           persistState({ ...readerState, sidebarOpen: !readerState.sidebarOpen })
         }
-        onCheckForUpdates={() =>
-          setUpdateResult({
-            configured: false,
-            updateAvailable: false,
-            currentVersion: course.contentVersion,
-          })
-        }
-        checkingForUpdates={false}
+        onCheckForUpdates={() => void checkForUpdates()}
+        checkingForUpdates={checkingForUpdates}
       />
       <div className="textbook-body">
         <LessonSidebar
@@ -220,7 +280,15 @@ export function TextbookApp({ contentProvider, stateStore }: TextbookAppProps) {
         <UpdateDialog
           language={readerState.language}
           result={updateResult}
-          onClose={() => setUpdateResult(null)}
+          applying={applyingUpdate}
+          error={updateError}
+          onClose={() => {
+            if (!applyingUpdate) {
+              setUpdateResult(null);
+              setUpdateError(null);
+            }
+          }}
+          onApply={applyUpdate}
         />
       ) : null}
     </div>

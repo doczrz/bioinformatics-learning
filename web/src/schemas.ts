@@ -38,4 +38,22 @@ export const siteConfigSchema = z.object({
   contentManifestUrl: z.string().url().nullable(),
 });
 
+export const contentReleaseAssetSchema = z.object({
+  path: z.string().min(1),
+  url: z.string().url(),
+  sizeBytes: z.number().int().nonnegative(),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+});
+
+export const contentReleaseManifestSchema = z.object({
+  schemaVersion: z.literal(1),
+  courseId: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  contentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  releaseTag: z.string().min(1),
+  commitSha: z.string().regex(/^[a-f0-9]{40}$/),
+  minimumUiVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  summary: translatedTitleSchema,
+  assets: z.array(contentReleaseAssetSchema).min(1),
+});
+
 export type CourseFile = z.infer<typeof courseFileSchema>;

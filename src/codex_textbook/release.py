@@ -19,7 +19,9 @@ SHA256 = re.compile(r"^[a-f0-9]{64}$")
 ALLOWED_GITHUB_HOSTS = {
     "github.com",
     "api.github.com",
+    "raw.githubusercontent.com",
     "objects.githubusercontent.com",
+    "release-assets.githubusercontent.com",
 }
 
 
@@ -91,14 +93,14 @@ def validate_release_manifest(manifest: dict[str, object]) -> None:
         "contentVersion",
         "releaseTag",
         "commitSha",
-        "minimumPluginVersion",
+        "minimumUiVersion",
     ):
         if not isinstance(manifest.get(field), str) or not manifest[field]:
             raise ValueError(f"release {field} is required")
     if not SEMVER.fullmatch(str(manifest["contentVersion"])):
         raise ValueError("contentVersion must use major.minor.patch")
-    if not SEMVER.fullmatch(str(manifest["minimumPluginVersion"])):
-        raise ValueError("minimumPluginVersion must use major.minor.patch")
+    if not SEMVER.fullmatch(str(manifest["minimumUiVersion"])):
+        raise ValueError("minimumUiVersion must use major.minor.patch")
     if not COMMIT_SHA.fullmatch(str(manifest["commitSha"])):
         raise ValueError("commitSha must contain 40 lowercase hexadecimal characters")
     summary = manifest.get("summary")
@@ -200,15 +202,15 @@ def build_release_manifest(
     version: str,
     release_tag: str,
     commit_sha: str,
-    minimum_plugin_version: str,
+    minimum_ui_version: str,
     summary_zh: str,
     summary_en: str,
     asset_base_url: str,
 ) -> dict[str, object]:
     source_root = source_root.resolve()
     output_root = output_root.resolve()
-    if not SEMVER.fullmatch(version) or not SEMVER.fullmatch(minimum_plugin_version):
-        raise ValueError("content and plugin versions must use major.minor.patch")
+    if not SEMVER.fullmatch(version) or not SEMVER.fullmatch(minimum_ui_version):
+        raise ValueError("content and UI versions must use major.minor.patch")
     if not COMMIT_SHA.fullmatch(commit_sha):
         raise ValueError("commit_sha must contain 40 lowercase hexadecimal characters")
     if not summary_zh.strip() or not summary_en.strip():
@@ -252,7 +254,7 @@ def build_release_manifest(
         "contentVersion": version,
         "releaseTag": release_tag,
         "commitSha": commit_sha,
-        "minimumPluginVersion": minimum_plugin_version,
+        "minimumUiVersion": minimum_ui_version,
         "summary": {"zh": summary_zh.strip(), "en": summary_en.strip()},
         "assets": assets,
     }

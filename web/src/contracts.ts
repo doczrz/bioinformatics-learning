@@ -46,6 +46,24 @@ export interface SiteConfig {
   contentManifestUrl: string | null;
 }
 
+export interface ContentReleaseAsset {
+  path: string;
+  url: string;
+  sizeBytes: number;
+  sha256: string;
+}
+
+export interface ContentReleaseManifest {
+  schemaVersion: 1;
+  courseId: string;
+  contentVersion: string;
+  releaseTag: string;
+  commitSha: string;
+  minimumUiVersion: string;
+  summary: Record<Language, string>;
+  assets: ContentReleaseAsset[];
+}
+
 export interface UpdateCheckResult {
   configured: boolean;
   updateAvailable: boolean;

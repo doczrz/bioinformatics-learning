@@ -7,7 +7,7 @@ github:
   latest_manifest_url: null
 
 release:
-  minimum_plugin_version: 0.1.0
+  minimum_ui_version: 0.1.0
   output_directory: dist/content-release
 
 # Dataset binaries are never included. Keep only authoritative URLs and metadata
