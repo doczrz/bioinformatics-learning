@@ -105,6 +105,22 @@ def validate_repository(
     return tuple(issues)
 
 
+def validate_release_pairs(
+    manifest: CourseManifest,
+) -> tuple[ValidationIssue, ...]:
+    issues: list[ValidationIssue] = []
+    for lesson in manifest.lessons:
+        if lesson.zh is None or lesson.en is None:
+            issues.append(
+                ValidationIssue(
+                    "error",
+                    "release-translation-pair-missing",
+                    f"lesson {lesson.id} requires paired zh and en files for release",
+                )
+            )
+    return tuple(issues)
+
+
 def default_url_checker(url: str) -> bool:
     try:
         request = urllib.request.Request(

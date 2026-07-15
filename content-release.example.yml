@@ -1,0 +1,14 @@
+schema_version: 1
+
+# Fill these only after creating the public course-content repository.
+github:
+  owner: null
+  repository: null
+  latest_manifest_url: null
+
+release:
+  minimum_plugin_version: 0.1.0
+  output_directory: dist/content-release
+
+# Dataset binaries are never included. Keep only authoritative URLs and metadata
+# in datasets/catalog.yml.

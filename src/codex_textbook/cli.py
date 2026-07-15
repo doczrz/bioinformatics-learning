@@ -5,6 +5,7 @@ import sys
 
 from .manifest import load_course_manifest, load_dataset_catalog
 from .render import UpdateViewState, render_dataset_catalog, render_user_views
+from .release import build_release_manifest
 from .state import load_state, save_state, set_language, set_lesson_status
 from .updater import UpdateError, apply_update, check_update
 from .validation import default_url_checker, validate_repository
@@ -32,6 +33,16 @@ def parser() -> ArgumentParser:
     commands.add_parser("check-update")
     update = commands.add_parser("apply-update")
     update.add_argument("--confirm-version", required=True)
+
+    release = commands.add_parser("build-release")
+    release.add_argument("--output", type=Path, required=True)
+    release.add_argument("--version", required=True)
+    release.add_argument("--release-tag", required=True)
+    release.add_argument("--commit-sha", required=True)
+    release.add_argument("--minimum-plugin-version", required=True)
+    release.add_argument("--summary-zh", required=True)
+    release.add_argument("--summary-en", required=True)
+    release.add_argument("--asset-base-url", required=True)
     return value
 
 
@@ -96,6 +107,22 @@ def main(argv: list[str] | None = None) -> int:
             render_dataset_catalog(root)
             render_user_views(root, state)
             print(state.kind)
+            return 0
+
+        if args.command == "build-release":
+            release = build_release_manifest(
+                root,
+                args.output,
+                version=args.version,
+                release_tag=args.release_tag,
+                commit_sha=args.commit_sha,
+                minimum_plugin_version=args.minimum_plugin_version,
+                summary_zh=args.summary_zh,
+                summary_en=args.summary_en,
+                asset_base_url=args.asset_base_url,
+            )
+            print(args.output / "release-manifest.json")
+            print(f"{len(release['assets'])} assets")
             return 0
     except (OSError, ValueError, UpdateError, subprocess.SubprocessError) as exc:
         print(f"error: {exc}", file=sys.stderr)

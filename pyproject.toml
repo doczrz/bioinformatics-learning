@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "codex-bilingual-textbook"
 version = "0.1.0"
+description = "Authoring and immutable content-release tools for the Codex bilingual textbook"
 requires-python = ">=3.11"
 dependencies = ["PyYAML>=6.0,<7"]
 
