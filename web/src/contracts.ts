@@ -45,3 +45,14 @@ export interface SiteConfig {
   uiVersion: string;
   contentManifestUrl: string | null;
 }
+
+export interface UpdateCheckResult {
+  configured: boolean;
+  updateAvailable: boolean;
+  currentVersion: string;
+  targetVersion?: string;
+  compatible?: boolean;
+  minimumUiVersion?: string;
+  downloadBytes?: number;
+  summary?: Record<Language, string>;
+}
