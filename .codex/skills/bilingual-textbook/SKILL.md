@@ -10,8 +10,10 @@ Use the repository as the textbook UI. Use Codex native conversation for every q
 ## Open and navigate
 
 1. Read `course-manifest.yml` and `OPEN_COURSE.md`.
-2. If `START_HERE.md` or `COURSE_STATUS.md` is missing, run `course-tool --root <project-root> init`.
-3. Open `START_HERE.md`. Follow `.course-state/preferences.json` when it contains a saved whole-page language preference.
+2. Use an available Python runtime. If `codex_textbook` cannot be imported, run `<python> -m pip install -e <project-root> --no-deps` once.
+3. Invoke UI commands as `<python> -m codex_textbook.cli --root <project-root> <command>`; use `course-tool` only when it is already on `PATH`.
+4. If `START_HERE.md` or `COURSE_STATUS.md` is missing, run the `init` command.
+5. Open `START_HERE.md`. Follow `.course-state/preferences.json` when it contains a saved whole-page language preference.
 
 Run `set-language zh|en` only when the user asks to switch the whole textbook. Run `set-progress <lesson-id> not_started|in_progress|completed` only when the user explicitly asks to record progress; opening a page never means completion.
 
