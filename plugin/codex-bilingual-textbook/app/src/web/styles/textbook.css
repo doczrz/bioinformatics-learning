@@ -641,6 +641,94 @@ a:focus-visible {
   color: var(--warning);
 }
 
+.dialog-backdrop {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--ink) 34%, transparent);
+  backdrop-filter: blur(5px);
+}
+
+.update-dialog {
+  width: min(580px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--sequence);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 22px 70px color-mix(in srgb, var(--ink) 28%, transparent);
+  font-family: var(--font-body);
+}
+
+.update-dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.update-dialog h2 {
+  margin: 3px 0 0;
+  font: 650 1.5rem/1.2 var(--font-display);
+}
+
+.release-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0 0 20px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--rule);
+}
+
+.release-facts div {
+  min-width: 0;
+  padding: 12px;
+  background: var(--paper-raised);
+}
+
+.release-facts dt {
+  margin-bottom: 6px;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.release-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.release-summary {
+  margin-bottom: 22px;
+  padding: 16px;
+  border-left: 3px solid var(--cobalt);
+  background: var(--paper-deep);
+}
+
+.release-summary h3 {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+}
+
+.release-summary p {
+  margin: 5px 0;
+  color: var(--ink-soft);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -759,6 +847,19 @@ a:focus-visible {
     inset: auto 12px 12px;
     width: auto;
     max-height: calc(100vh - 24px);
+  }
+
+  .dialog-backdrop {
+    padding: 12px;
+  }
+
+  .update-dialog {
+    max-height: calc(100vh - 24px);
+    padding: 20px;
+  }
+
+  .release-facts {
+    grid-template-columns: 1fr;
   }
 }
 

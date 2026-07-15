@@ -33,4 +33,22 @@ export const courseFileSchema = z.object({
   datasets: z.array(datasetEntrySchema).default([]),
 });
 
+export const contentReleaseManifestSchema = z.object({
+  schemaVersion: z.literal(1),
+  courseId: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  contentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  releaseTag: z.string().min(1),
+  commitSha: z.string().regex(/^[a-f0-9]{40}$/),
+  minimumPluginVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  summary: translatedTitleSchema,
+  assets: z.array(
+    z.object({
+      path: z.string().min(1),
+      url: z.string().url(),
+      sizeBytes: z.number().int().nonnegative(),
+      sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    }),
+  ).min(1),
+});
+
 export type CourseFile = z.infer<typeof courseFileSchema>;

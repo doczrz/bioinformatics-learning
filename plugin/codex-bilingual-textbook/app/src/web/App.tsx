@@ -5,12 +5,15 @@ import type {
   DatasetEntry,
   Language,
   LessonPayload,
+  UpdateApplyResult,
+  UpdateCheckResult,
 } from "../shared/contracts";
 import { useTextbookBridge, type TextbookBridge } from "./bridge/app-bridge";
 import { CourseHeader } from "./components/CourseHeader";
 import { DatasetPanel } from "./components/DatasetPanel";
 import { LessonReader } from "./components/LessonReader";
 import { LessonSidebar } from "./components/LessonSidebar";
+import { UpdateDialog } from "./components/UpdateDialog";
 import {
   defaultReaderState,
   type ReaderState,
@@ -37,6 +40,10 @@ export function TextbookApp({ bridge }: TextbookAppProps) {
   const [lesson, setLesson] = useState<LessonPayload | null>(null);
   const [datasets, setDatasets] = useState<DatasetEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [checkingForUpdates, setCheckingForUpdates] = useState(false);
+  const [updateResult, setUpdateResult] = useState<UpdateCheckResult | null>(null);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [applyingUpdate, setApplyingUpdate] = useState(false);
   const requestSequence = useRef(0);
 
   const persistState = useCallback(
@@ -127,6 +134,69 @@ export function TextbookApp({ bridge }: TextbookAppProps) {
     void loadLesson(course, lessonId, readerState.language, nextState);
   }
 
+  async function checkForUpdates() {
+    if (!course || checkingForUpdates) return;
+    setCheckingForUpdates(true);
+    setUpdateError(null);
+    try {
+      const result = await bridge.callTool<UpdateCheckResult>(
+        "check_course_update",
+        {
+          currentVersion: course.contentVersion,
+          language: readerState.language,
+        },
+      );
+      setUpdateResult(result);
+    } catch (caught) {
+      setUpdateResult({
+        configured: true,
+        updateAvailable: false,
+        currentVersion: course.contentVersion,
+      });
+      setUpdateError(
+        caught instanceof Error ? caught.message : "Could not check for updates.",
+      );
+    } finally {
+      setCheckingForUpdates(false);
+    }
+  }
+
+  async function applyUpdate(targetVersion: string) {
+    if (!course || !lesson || applyingUpdate) return;
+    const previousRevision = course.revision;
+    setApplyingUpdate(true);
+    setUpdateError(null);
+    try {
+      await bridge.callTool<UpdateApplyResult>("apply_course_update", {
+        expectedCurrentVersion: course.contentVersion,
+        targetVersion,
+      });
+      const nextCourse = await bridge.callTool<CourseIndex>("open_course", {
+        language: readerState.language,
+      });
+      if (
+        nextCourse.contentVersion !== targetVersion ||
+        nextCourse.revision <= previousRevision
+      ) {
+        throw new Error("The updated course did not return a newer revision.");
+      }
+      setCourse(nextCourse);
+      await loadLesson(
+        nextCourse,
+        lesson.lessonId,
+        readerState.language,
+        readerState,
+      );
+      setUpdateResult(null);
+    } catch (caught) {
+      setUpdateError(
+        caught instanceof Error ? caught.message : "Could not apply the update.",
+      );
+    } finally {
+      setApplyingUpdate(false);
+    }
+  }
+
   if (!course || !lesson) {
     return (
       <main className="connection-state" aria-label="Bilingual interactive textbook">
@@ -145,6 +215,8 @@ export function TextbookApp({ bridge }: TextbookAppProps) {
         onToggleSidebar={() =>
           persistState({ ...readerState, sidebarOpen: !readerState.sidebarOpen })
         }
+        onCheckForUpdates={() => void checkForUpdates()}
+        checkingForUpdates={checkingForUpdates}
       />
       <div className="textbook-body">
         <LessonSidebar
@@ -169,6 +241,21 @@ export function TextbookApp({ bridge }: TextbookAppProps) {
           <DatasetPanel datasets={datasets} language={readerState.language} bridge={bridge} />
         </div>
       </div>
+      {updateResult ? (
+        <UpdateDialog
+          language={readerState.language}
+          result={updateResult}
+          applying={applyingUpdate}
+          error={updateError}
+          onClose={() => {
+            if (!applyingUpdate) {
+              setUpdateResult(null);
+              setUpdateError(null);
+            }
+          }}
+          onApply={applyUpdate}
+        />
+      ) : null}
     </div>
   );
 }

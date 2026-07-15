@@ -11,6 +11,7 @@ import { z } from "zod";
 
 import type { ContentStore } from "../shared/contracts";
 import { languageSchema } from "../shared/schemas";
+import type { CourseUpdateService } from "./update/update-service";
 
 export const READER_URI = "ui://codex-bilingual-textbook/reader.html";
 
@@ -24,6 +25,7 @@ const READ_ONLY_ANNOTATIONS = {
 interface CourseServerOptions {
   contentStore: ContentStore;
   widgetHtml: string;
+  updateService?: CourseUpdateService;
 }
 
 function readerMeta() {
@@ -33,6 +35,7 @@ function readerMeta() {
 export function createCourseServer({
   contentStore,
   widgetHtml,
+  updateService,
 }: CourseServerOptions): McpServer {
   const server = new McpServer({
     name: "codex-bilingual-textbook",
@@ -160,6 +163,88 @@ export function createCourseServer({
           language,
           datasets,
         },
+      };
+    },
+  );
+
+  registerAppTool(
+    server,
+    "check_course_update",
+    {
+      title: "Check course content update",
+      description: "Check the configured public content channel without activating it.",
+      inputSchema: {
+        currentVersion: z.string(),
+        language: languageSchema,
+      },
+      annotations: {
+        ...READ_ONLY_ANNOTATIONS,
+        openWorldHint: true,
+      },
+      _meta: readerMeta(),
+    },
+    async ({ currentVersion, language }) => {
+      const result = updateService
+        ? await updateService.checkCourseUpdate(currentVersion, language)
+        : {
+            configured: false,
+            updateAvailable: false,
+            currentVersion,
+            message: "Online course updates are not configured.",
+          };
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: result.configured
+              ? result.updateAvailable
+                ? `Course content ${result.targetVersion} is available.`
+                : "Course content is current."
+              : result.message ?? "Online course updates are not configured.",
+          },
+        ],
+        structuredContent: { ...result },
+      };
+    },
+  );
+
+  registerAppTool(
+    server,
+    "apply_course_update",
+    {
+      title: "Apply verified course content update",
+      description:
+        "Download, verify, cache, and activate the exact content version confirmed by the learner.",
+      inputSchema: {
+        expectedCurrentVersion: z.string(),
+        targetVersion: z.string(),
+      },
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
+      _meta: readerMeta(),
+    },
+    async ({ expectedCurrentVersion, targetVersion }) => {
+      if (!updateService) {
+        throw new Error("Online course updates are not configured.");
+      }
+      const result = await updateService.applyCourseUpdate(
+        expectedCurrentVersion,
+        targetVersion,
+      );
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: result.applied
+              ? `Activated course content ${result.contentVersion}.`
+              : `Course content ${result.contentVersion} was already active.`,
+          },
+        ],
+        structuredContent: { ...result },
       };
     },
   );

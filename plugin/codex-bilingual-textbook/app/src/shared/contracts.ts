@@ -41,6 +41,40 @@ export interface DatasetEntry {
   sha256?: string;
 }
 
+export interface ContentReleaseManifest {
+  schemaVersion: 1;
+  courseId: string;
+  contentVersion: string;
+  releaseTag: string;
+  commitSha: string;
+  minimumPluginVersion: string;
+  summary: Record<Language, string>;
+  assets: Array<{
+    path: string;
+    url: string;
+    sizeBytes: number;
+    sha256: string;
+  }>;
+}
+
+export interface UpdateCheckResult {
+  configured: boolean;
+  updateAvailable: boolean;
+  currentVersion: string;
+  targetVersion?: string;
+  compatible?: boolean;
+  minimumPluginVersion?: string;
+  downloadBytes?: number;
+  summary?: Record<Language, string>;
+  message?: string;
+}
+
+export interface UpdateApplyResult {
+  applied: boolean;
+  contentVersion: string;
+  revision?: number;
+}
+
 export interface ContentStore {
   getCourse(): Promise<CourseIndex>;
   getLesson(
