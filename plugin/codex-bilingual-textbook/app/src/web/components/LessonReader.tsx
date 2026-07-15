@@ -1,11 +1,15 @@
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 
 import type { Language, LessonPayload } from "../../shared/contracts";
 import type { TextbookBridge } from "../bridge/app-bridge";
+import { extractLessonSelection, type LessonSelection } from "../selection/extract-selection";
+import { formatCodexQuestion } from "../selection/format-question";
+import { AskComposer } from "./AskComposer";
 import { CodeBlock } from "./CodeBlock";
+import { SelectionAction } from "./SelectionAction";
 
 interface LessonReaderProps {
   lesson: LessonPayload;
@@ -15,6 +19,9 @@ interface LessonReaderProps {
 
 export function LessonReader({ lesson, language, bridge }: LessonReaderProps) {
   const isChinese = language === "zh";
+  const readerRef = useRef<HTMLElement>(null);
+  const [selection, setSelection] = useState<LessonSelection | null>(null);
+  const [composerOpen, setComposerOpen] = useState(false);
 
   if (!lesson.translationAvailable) {
     return (
@@ -38,8 +45,45 @@ export function LessonReader({ lesson, language, bridge }: LessonReaderProps) {
     };
   }
 
+  function captureSelection() {
+    if (!readerRef.current || composerOpen) return;
+    setSelection(extractLessonSelection(readerRef.current, window.getSelection()));
+  }
+
+  function clearSelection() {
+    setComposerOpen(false);
+    setSelection(null);
+    window.getSelection()?.removeAllRanges();
+    queueMicrotask(() => readerRef.current?.focus());
+  }
+
+  async function sendQuestion(question: string) {
+    if (!selection) return;
+    await bridge.sendMessage(
+      formatCodexQuestion({
+        courseId: lesson.courseId,
+        contentVersion: lesson.contentVersion,
+        lessonId: lesson.lessonId,
+        sectionHeading: selection.sectionHeading || lesson.title,
+        language,
+        selectedText: selection.text,
+        question,
+      }),
+    );
+    clearSelection();
+  }
+
   return (
-    <main className="lesson-reader" id="lesson-content" data-lesson-id={lesson.lessonId}>
+    <>
+    <main
+      ref={readerRef}
+      className="lesson-reader"
+      id="lesson-content"
+      data-lesson-id={lesson.lessonId}
+      tabIndex={-1}
+      onMouseUp={captureSelection}
+      onKeyUp={captureSelection}
+    >
       <div className="lesson-meta">
         <span>{isChinese ? "课程正文" : "Lesson"}</span>
         <code>{lesson.lessonId}</code>
@@ -88,5 +132,21 @@ export function LessonReader({ lesson, language, bridge }: LessonReaderProps) {
         {lesson.markdown}
       </ReactMarkdown>
     </main>
+    {selection && !composerOpen ? (
+      <SelectionAction
+        language={language}
+        selection={selection}
+        onAsk={() => setComposerOpen(true)}
+      />
+    ) : null}
+    {selection && composerOpen ? (
+      <AskComposer
+        language={language}
+        selection={selection}
+        onCancel={clearSelection}
+        onSend={sendQuestion}
+      />
+    ) : null}
+    </>
   );
 }
