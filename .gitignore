@@ -1,5 +1,6 @@
 .superpowers/
 .openai-docs-cache/
+.worktrees/
 .course-state/
 my-notes/
 /START_HERE.md
