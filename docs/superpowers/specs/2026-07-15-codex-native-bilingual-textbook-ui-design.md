@@ -187,7 +187,7 @@ my-notes/
 └── *.md
 ```
 
-项目根目录中的 `START_HERE.md` 和 `COURSE_STATUS.md` 是由 Skill 根据模板与 `.course-state/` 生成的本地视图；它们与 `.course-state/`、`my-notes/` 一样必须被 Git 忽略。发布更新脚本不得删除 `.course-state/` 或 `my-notes/`，也不得把本地状态写回发布模板。
+项目根目录中的 `START_HERE.md`、`START_HERE.zh.md`、`START_HERE.en.md`、`COURSE_STATUS.md`、`COURSE_STATUS.zh.md` 和 `COURSE_STATUS.en.md` 是由 Skill 根据模板与 `.course-state/` 生成的本地视图；它们与 `.course-state/`、`my-notes/` 一样必须被 Git 忽略。发布更新脚本不得删除 `.course-state/` 或 `my-notes/`，也不得把本地状态写回发布模板。
 
 ## 8. 状态模型
 
