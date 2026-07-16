@@ -8,9 +8,9 @@ Use this exact table structure:
 
 | ID | Priority | Beginner problem | Proposed improvement | Author decision required |
 | --- | --- | --- | --- | --- |
-| R01 | Required | ... | ... | Approve or reject |
+| B01 | Required | ... | ... | Approve or reject |
 
-Keep IDs stable across discussion. Continue with `R02`, `R03`, and so on; never renumber an existing issue after the author has responded.
+Keep IDs stable across discussion. Continue with `B02`, `B03`, and so on; never renumber an existing issue after the author has responded.
 
 Priority meanings:
 
@@ -32,7 +32,29 @@ Check whether:
 - the learner has a checkpoint before moving on;
 - the amount of detail matches the lesson goal.
 
-After the table, ask the author to approve or reject issue IDs. Do not edit until the response arrives.
+## Domain-expert completeness audit
+
+Audit the same frozen Chinese draft independently and without editing it. Review as a senior specialist in transcriptomics, single-cell and single-cell multiomics, and spatial omics. Evaluate the lesson against its declared goal and position in the course; do not demand that every lesson become a comprehensive review article.
+
+Use this exact table structure:
+
+| ID | Priority | Expert gap | Why it matters | Proposed addition or deferral | Author decision required |
+| --- | --- | --- | --- | --- | --- |
+| E01 | Required | ... | ... | ... | Approve or reject |
+
+Keep `Exx` IDs stable and separate from beginner-audit IDs. Check whether:
+
+- the scientific and historical claims are accurate, current enough for the lesson, and supported by primary or official sources;
+- the stated scope omits any prerequisite concept needed to understand the biological question, assay, data, or interpretation;
+- the causal chain from sample collection and preparation through assay chemistry, sequencing files, preprocessing, and analysis outputs is complete;
+- platform or method comparisons state the relevant sample types, assay versions, tradeoffs, and evidence limits;
+- important sources of bias are covered or explicitly deferred, including dissociation effects, cell versus nucleus assays, ambient RNA, doublets, low-RNA cells, batch effects, and cell-calling choices when relevant;
+- experimental design, biological replication, sample metadata, multiplexing, controls, and independent biological validation are covered or signposted when the lesson relies on them;
+- multiomic or spatial claims distinguish measured modalities, resolution, capture efficiency, and what cannot be inferred;
+- the lesson clearly hands off to later computational steps without implying that one software package completes the entire analysis;
+- an omission belongs in the current lesson, needs only a one-sentence signpost, or should be assigned to a named later lesson.
+
+After both audit tables, ask the author to approve or reject `Bxx` and `Exx` IDs. Do not edit until the response arrives. If the author rejects an issue, preserve that decision and do not reintroduce the same change under a new ID.
 
 ## Media selection and licence record
 
@@ -57,6 +79,16 @@ Record for every third-party item:
 - modifications, including cropping, translation, labels, or color changes.
 
 For original project diagrams, record that they are project-created and list the source data or scientific references used to design them.
+
+Project-created diagrams may be drawn manually or generated with an image-generation model. For a generated diagram:
+
+- write a scientifically constrained prompt rather than asking the model to imitate a vendor's proprietary figure;
+- avoid vendor logos, copied layouts, screenshots, watermarks, and trademark-like branding;
+- manually verify every depicted step, label, molecule, direction, and platform-specific claim against primary literature or official documentation;
+- reject and regenerate any image with unreadable text, invented components, incorrect geometry, or misleading biological scale;
+- record the generation tool, generation date, final prompt, scientific references, and any manual edits in the figure credit or media record.
+
+Do not copy a vendor's website figure into the repository unless its licence explicitly permits redistribution or written permission has been obtained. When permission is absent, link to the official page for reference and create an independently designed project diagram from verified scientific facts.
 
 ## Bilingual parity
 

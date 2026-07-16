@@ -1,6 +1,6 @@
 ---
 name: writing-bioinformatics-tutorials
-description: Use when writing, rewriting, reviewing, translating, or publishing Bioinformatics Interactive Learning lessons for readers with high-school biology knowledge and no assumed bioinformatics or programming experience.
+description: Use when writing, rewriting, reviewing, translating, or publishing Bioinformatics Interactive Learning lessons for readers with high-school biology knowledge and no assumed bioinformatics or programming experience, including separate beginner-usability and domain-expert completeness audits.
 ---
 
 # Writing Bioinformatics Tutorials
@@ -35,18 +35,19 @@ Follow these phases in order. Do not combine drafting, auditing, approval, and r
 4. Keep this draft local and uncommitted.
 5. Do not write the English version yet.
 
-### 3. Perform a separate beginner audit
+### 3. Perform two separate audits
 
-After the Chinese draft exists, stop editing it and switch roles: review it as a learner with only high-school biology.
+After the Chinese draft exists, freeze it. Perform both audits without editing the lesson and without letting one audit's conclusions anchor the other.
 
-1. Use the audit table and stable issue IDs defined in the checklist.
-2. Classify every issue as Required, Recommended, or Optional.
-3. Explain the learner's difficulty and a proposed improvement; do not silently rewrite the lesson.
-4. Present the audit to the author and wait for decisions on the issue IDs.
+1. **Beginner audit:** review as a learner with only high-school biology. Identify unexplained prerequisites, logical jumps, misleading analogies, excessive density, and unusable checkpoints.
+2. **Domain-expert audit:** review as a senior specialist in transcriptomics, single-cell and single-cell multiomics, and spatial omics. Identify scientific errors, missing concepts required by the declared scope, unsupported comparisons, incomplete experimental-to-computational handoffs, and important omissions that should be taught now or signposted for a later lesson.
+3. Use the separate tables and stable `Bxx` and `Exx` issue IDs defined in the checklist.
+4. Classify every issue as Required, Recommended, or Optional. Do not expand a lesson merely to display expertise; judge omissions against the lesson goal and the course roadmap.
+5. Present both audits to the author and wait for decisions on every issue ID.
 
 ### 4. Apply only approved revisions
 
-1. Change only the issue IDs the author approved.
+1. Change only the `Bxx` and `Exx` issue IDs the author approved.
 2. Preserve explicitly rejected choices.
 3. If revision reveals a new substantive improvement, add a new issue ID and request approval instead of applying it silently.
 4. Repeat the audit when the approved changes materially alter the teaching sequence.
@@ -73,7 +74,7 @@ If any required check fails, stop publication and report the failure. After all 
 ## Hard gates
 
 - “Audit and fix it” still means audit first, present stable IDs, and wait for approval before editing.
-- A draft that already appears beginner-friendly still requires the separate learner audit.
+- A draft that appears beginner-friendly still requires both the learner audit and the independent domain-expert audit.
 - Deadlines do not remove the approval, verification, licensing, or workspace-protection gates.
 - Free or educational use does not make an image reusable; verify the original source and licence.
 - Do not recreate or publish `docs/superpowers`, unrelated internal planning directories, or ignored development artifacts.
