@@ -43,10 +43,29 @@ function contentType(path: string): string {
   } as Record<string, string>)[extension ?? ""] ?? "application/octet-stream";
 }
 
-function validCachedRelease(value: CachedRelease | null): {
+function compareVersions(left: string, right: string): number {
+  const a = left.split(".").map(Number);
+  const b = right.split(".").map(Number);
+  for (let index = 0; index < 3; index += 1) {
+    if (a[index] !== b[index]) return a[index] - b[index];
+  }
+  return 0;
+}
+
+function hex(bytes: ArrayBuffer): string {
+  return Array.from(
+    new Uint8Array(bytes),
+    (byte) => byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
+async function validCachedRelease(
+  value: CachedRelease | null,
+  crypto: Crypto,
+): Promise<{
   release: CachedRelease;
   course: CourseFile;
-} | null {
+} | null> {
   if (!value || !value.assets || typeof value.assets !== "object") return null;
   const manifest = contentReleaseManifestSchema.safeParse(value.manifest);
   if (!manifest.success) return null;
@@ -61,7 +80,12 @@ function validCachedRelease(value: CachedRelease | null): {
       return null;
     }
     for (const asset of manifest.data.assets) {
-      if (!(value.assets[asset.path] instanceof ArrayBuffer)) return null;
+      const bytes = value.assets[asset.path];
+      if (!(bytes instanceof ArrayBuffer) || bytes.byteLength !== asset.sizeBytes) {
+        return null;
+      }
+      const digest = hex(await crypto.subtle.digest("SHA-256", bytes));
+      if (digest !== asset.sha256) return null;
     }
     return {
       release: { manifest: manifest.data, assets: value.assets },
@@ -81,6 +105,7 @@ export class CachedContentProvider implements ContentProvider {
   constructor(
     private readonly fallback: ContentProvider,
     private readonly cache: ContentCache,
+    private readonly crypto: Crypto = globalThis.crypto,
   ) {}
 
   private async ensureReady(): Promise<void> {
@@ -94,14 +119,20 @@ export class CachedContentProvider implements ContentProvider {
     this.blobUrls.clear();
     this.release = null;
     this.course = null;
+    await this.fallback.refresh();
+    const fallbackCourse = await this.fallback.getCourse().catch(() => null);
     const candidate = await this.cache.readActive().catch(() => null);
-    const valid = validCachedRelease(candidate);
-    if (valid) {
+    const valid = await validCachedRelease(candidate, this.crypto);
+    if (
+      valid &&
+      (!fallbackCourse ||
+        (valid.course.courseId === fallbackCourse.courseId &&
+          compareVersions(valid.course.contentVersion, fallbackCourse.contentVersion) > 0))
+    ) {
       this.release = valid.release;
       this.course = valid.course;
     }
     this.initialized = true;
-    await this.fallback.refresh();
   }
 
   async getCourse(): Promise<CourseIndex> {

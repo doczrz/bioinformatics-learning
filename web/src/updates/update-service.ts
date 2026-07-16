@@ -54,15 +54,19 @@ function assertSafeAssetPath(path: string): void {
 function assertImmutableAssetUrl(
   assetUrl: string,
   manifest: ContentReleaseManifest,
+  assetPath: string,
 ): void {
   const url = assertGithubUrl(assetUrl);
-  const path = decodeURIComponent(url.pathname);
-  const lowered = path.toLowerCase();
+  const parts = url.pathname
+    .split("/")
+    .filter(Boolean)
+    .map((part) => decodeURIComponent(part));
+  const repositoryPath = parts.slice(3).join("/");
   if (
-    lowered.includes("/refs/heads/") ||
-    lowered.includes("/raw/main") ||
-    lowered.includes("/raw/master") ||
-    (!path.includes(manifest.releaseTag) && !path.includes(manifest.commitSha))
+    url.hostname !== "raw.githubusercontent.com" ||
+    parts.length < 4 ||
+    parts[2] !== manifest.commitSha ||
+    !(repositoryPath === assetPath || repositoryPath.endsWith(`/${assetPath}`))
   ) {
     throw new Error("Content asset URL must identify an immutable GitHub release.");
   }
@@ -77,7 +81,7 @@ function checkedManifest(value: unknown): ContentReleaseManifest {
       throw new Error(`Duplicate release asset path: ${asset.path}`);
     }
     paths.add(asset.path);
-    assertImmutableAssetUrl(asset.url, manifest);
+    assertImmutableAssetUrl(asset.url, manifest, asset.path);
   }
   return manifest;
 }
@@ -94,6 +98,29 @@ function decodeCourse(bytes: ArrayBuffer) {
     const message = caught instanceof Error ? caught.message : "invalid content";
     throw new Error(`Invalid course.json: ${message}`);
   }
+}
+
+function decodeLesson(bytes: ArrayBuffer, path: string): string {
+  try {
+    const markdown = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    if (!markdown.trim()) throw new Error("empty lesson");
+    return markdown;
+  } catch {
+    throw new Error(`Invalid UTF-8 lesson asset: ${path}`);
+  }
+}
+
+function localMarkdownImagePaths(markdown: string): Set<string> {
+  const paths = new Set<string>();
+  const images = /!\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
+  for (const match of markdown.matchAll(images)) {
+    const source = match[1] ?? match[2];
+    if (!source || /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(source)) continue;
+    const path = decodeURIComponent(source.split(/[?#]/, 1)[0]);
+    assertSafeAssetPath(path);
+    paths.add(path);
+  }
+  return paths;
 }
 
 export interface ContentUpdateClient {
@@ -115,9 +142,7 @@ interface ContentUpdateServiceOptions {
 
 interface CheckedRelease {
   currentVersion: string;
-  targetVersion: string;
-  commitSha: string;
-  compatible: boolean;
+  manifest: ContentReleaseManifest;
 }
 
 export class ContentUpdateService implements ContentUpdateClient {
@@ -168,9 +193,7 @@ export class ContentUpdateService implements ContentUpdateClient {
     if (updateAvailable) {
       this.checked = {
         currentVersion,
-        targetVersion: manifest.contentVersion,
-        commitSha: manifest.commitSha,
-        compatible,
+        manifest,
       };
     }
     return {
@@ -192,19 +215,19 @@ export class ContentUpdateService implements ContentUpdateClient {
     if (!this.checked || expectedCurrentVersion !== this.checked.currentVersion) {
       throw new Error("The checked current version no longer matches the open course.");
     }
-    if (targetVersion !== this.checked.targetVersion) {
+    if (targetVersion !== this.checked.manifest.contentVersion) {
       throw new Error("The checked target version does not match the requested update.");
     }
-    if (!this.checked.compatible) {
+    if (compareVersions(this.uiVersion, this.checked.manifest.minimumUiVersion) < 0) {
       throw new Error("The checked release requires a newer textbook UI.");
     }
 
     const manifest = await this.fetchManifest();
-    if (
-      manifest.contentVersion !== this.checked.targetVersion ||
-      manifest.commitSha !== this.checked.commitSha
-    ) {
+    if (JSON.stringify(manifest) !== JSON.stringify(this.checked.manifest)) {
       throw new Error("The content release changed since it was checked. Check again.");
+    }
+    if (compareVersions(this.uiVersion, manifest.minimumUiVersion) < 0) {
+      throw new Error("The content release now requires a newer textbook UI.");
     }
 
     const assets: Record<string, ArrayBuffer> = {};
@@ -234,11 +257,20 @@ export class ContentUpdateService implements ContentUpdateClient {
       throw new Error("course.json does not match the checked content release.");
     }
     for (const lesson of course.lessons) {
-      if (
-        !assets[`lessons/${lesson.id}.zh.md`] ||
-        !assets[`lessons/${lesson.id}.en.md`]
-      ) {
+      const zhPath = `lessons/${lesson.id}.zh.md`;
+      const enPath = `lessons/${lesson.id}.en.md`;
+      const zhBytes = assets[zhPath];
+      const enBytes = assets[enPath];
+      if (!zhBytes || !enBytes) {
         throw new Error(`Missing paired lesson asset: ${lesson.id}`);
+      }
+      for (const [path, bytes] of [[zhPath, zhBytes], [enPath, enBytes]] as const) {
+        const markdown = decodeLesson(bytes, path);
+        for (const imagePath of localMarkdownImagePaths(markdown)) {
+          if (!assets[imagePath]) {
+            throw new Error(`Missing referenced lesson asset: ${imagePath}`);
+          }
+        }
       }
     }
 

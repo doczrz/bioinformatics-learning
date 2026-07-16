@@ -3,6 +3,7 @@ export type Language = "zh" | "en";
 export interface LessonSummary {
   id: string;
   order: number;
+  number?: string;
   title: Record<Language, string>;
 }
 

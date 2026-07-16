@@ -10,6 +10,7 @@ const translatedTitleSchema = z.object({
 export const lessonSummarySchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   order: z.number().int().nonnegative(),
+  number: z.string().regex(/^\d+(?:\.\d+)*$/).optional(),
   title: translatedTitleSchema,
 });
 

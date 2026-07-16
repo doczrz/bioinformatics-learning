@@ -22,9 +22,23 @@ The production artifact is `web/dist/`. Publish that directory through HTTPS. Co
 
 ## Course content updates
 
-`public/content/site-config.json` contains the UI version and `contentManifestUrl`. The URL remains `null` until a real public course-content repository is available; bundled development content stays readable and the update dialog reports that online updates are not configured.
+`public/content/site-config.json` contains the UI version and `contentManifestUrl`. The current URL points to the stable release manifest in this public repository. Bundled content remains readable when GitHub is unavailable.
 
 A configured manifest must be publicly readable over HTTPS from GitHub. Its content assets must use immutable release-tag or commit URLs, include byte sizes and SHA-256 hashes, and provide paired Chinese and English lesson files. The browser never contains a GitHub token. A learner explicitly confirms an update before any content assets are downloaded; the previous verified IndexedDB release remains active if verification fails.
+
+The current project uses this public repository as its content source. Publishing a content update is a two-commit process so that every downloaded asset can be pinned to an immutable Git commit:
+
+1. Update `public/content/dev/course.json` and the paired lesson and figure files, increment `contentVersion`, verify the application, and commit those changes.
+2. Copy the full 40-character content commit SHA printed by `git rev-parse HEAD`.
+3. Generate the stable manifest from the committed Git blobs, not from Windows working-tree bytes:
+
+   ```powershell
+   node web/scripts/generate-content-manifest.mjs <content-commit-sha> "中文更新摘要" "English release summary"
+   ```
+
+4. Inspect `public/content/release-manifest.json`, commit it, and push both commits. The stable manifest follows `master`, while every asset URL inside it remains pinned to the earlier content commit SHA.
+
+Every published course version must be greater than the previous version. Do not run the legacy root `course-manifest.yml` release flow for current Web content; it is not yet synchronized with `public/content/dev`.
 
 The webpage source repository may remain private, but every compiled HTML, CSS, and JavaScript asset sent to a browser is visible to that browser. Production source maps are disabled.
 

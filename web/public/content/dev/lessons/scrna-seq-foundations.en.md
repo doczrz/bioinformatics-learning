@@ -1,4 +1,4 @@
-# Chapter 1 | How Does Single-Cell RNA Sequencing Work?
+# 1.1 | Single-Cell RNA Sequencing: History, Principles, and Platforms
 
 Imagine a glass of juice made by blending several kinds of fruit. A test can tell you how sweet the juice is, but it cannot easily tell you whether most of that sweetness came from apples or from a small number of very sweet grapes.
 
@@ -6,7 +6,7 @@ A tissue sample presents a similar problem. A tumor, a drop of blood, or a small
 
 Single-cell RNA sequencing (scRNA-seq) addresses this problem with one central idea: **before RNA from different cells is pooled for sequencing, give each cellular source a traceable label.**
 
-We will not run any software in this chapter. For now, we will build one clear line of reasoning:
+We will not run any software in this lesson. For now, we will build one clear line of reasoning:
 
 > biological sample → individual cells → label each RNA source → sequencing → gene-by-cell expression matrix
 
@@ -20,9 +20,9 @@ We will not run any software in this chapter. For now, we will build one clear l
 
 If these four statements make sense, you know enough to continue.
 
-The routine single-cell gene-expression workflows discussed in this chapter mainly measure poly(A)-tailed mRNA molecules that the experiment successfully captures. They do not count every kind of RNA in a cell equally. The final counts are shaped by RNA production, RNA degradation, and experimental capture efficiency. They therefore estimate how many mRNA molecules were still present and captured at a particular moment; they cannot be read directly as a gene's transcription rate.
+The routine single-cell gene-expression workflows discussed in this lesson mainly measure poly(A)-tailed mRNA molecules that the experiment successfully captures. They do not count every kind of RNA in a cell equally. The final counts are shaped by RNA production, RNA degradation, and experimental capture efficiency. They therefore estimate how many mRNA molecules were still present and captured at a particular moment; they cannot be read directly as a gene's transcription rate.
 
-## 1. Why Not Measure One Tube of Mixed RNA?
+## Why Not Measure One Tube of Mixed RNA?
 
 Suppose a sample contains 90 type A cells and 10 type B cells. An inflammation-related gene is highly expressed only in type B cells. If all 100 cells are measured together, that signal is averaged across the sample. A researcher may see that “the sample contains some inflammatory RNA” without knowing which type of cell produced it.
 
@@ -49,11 +49,11 @@ One idea is essential from the beginning: **these numbers are technical measurem
 
 Dissociation-based scRNA-seq has another boundary: when tissue is separated into individual cells, the cells usually lose their original spatial coordinates. A clustering plot shown later represents similarity in expression patterns, not the cells' true positions in the tissue. Spatial information must be measured separately through tissue imaging or spatial omics.
 
-## 2. How Did This Technology Develop?
+## How Did This Technology Develop?
 
 The history of a technology is more than a list of dates. Each advance answered a new question.
 
-### 2.1 2009: Can We Measure RNA from a Single Cell?
+### 2009: Can We Measure RNA from a Single Cell?
 
 In 2009, Tang Fuchou and colleagues at Peking University published a study in *Nature Methods* showing that whole-transcriptome mRNA sequencing was feasible in individual mouse blastomeres and oocytes. The study's data tables list 6 independent single-cell samples. It showed that even with very little starting RNA, RNA could be converted into cDNA and large numbers of genes could then be observed using high-throughput sequencing.
 
@@ -61,7 +61,7 @@ This work is commonly regarded as one of the important starting points of single
 
 [Read the original paper by Tang and colleagues](https://doi.org/10.1038/nmeth.1315)
 
-### 2.2 Smart-seq: Can We See More of Each Transcript?
+### Smart-seq: Can We See More of Each Transcript?
 
 RNA is unstable, and a single cell contains only a small amount of it. Experiments therefore usually begin with **reverse transcription**, which copies RNA into more stable complementary DNA (cDNA), before amplification and sequencing.
 
@@ -73,7 +73,7 @@ The term “full length” is easy to misunderstand. It means that sequencing re
 
 [Original Smart-seq paper](https://doi.org/10.1038/nbt.2282) · [Original Smart-seq2 paper](https://doi.org/10.1038/nmeth.2639) · [Original Smart-seq3 paper](https://doi.org/10.1038/s41587-020-0497-0)
 
-### 2.3 Droplet Technology: Can We Measure More Cells at Once?
+### Droplet Technology: Can We Measure More Cells at Once?
 
 As the goal shifted from “study a few cells in depth” to “map the cells in a complex tissue,” researchers needed to process thousands of cells in parallel. In 2015, the inDrop and Drop-seq studies demonstrated approaches that use tiny droplets to label RNA from many cells in parallel. In 2017, Zheng and colleagues reported a high-throughput system that later became an important foundation of the 10x Genomics Chromium workflow and demonstrated data from tens of thousands of human peripheral blood mononuclear cells.
 
@@ -81,7 +81,7 @@ As the goal shifted from “study a few cells in depth” to “map the cells in
 
 [Original inDrop paper](https://doi.org/10.1016/j.cell.2015.04.044) · [Original Drop-seq paper](https://doi.org/10.1016/j.cell.2015.05.002) · [Original paper by Zheng and colleagues](https://doi.org/10.1038/ncomms14049)
 
-## 3. Remember One Central Action: Add an “Address” Before Mixing
+## Remember One Central Action: Add an “Address” Before Mixing
 
 If one thousand cells are lysed directly, all their RNA enters the same tube. Once that happens, the RNA sequence alone cannot tell us which cell a molecule originally came from.
 
@@ -103,7 +103,7 @@ This analogy has three boundaries:
 2. A UMI helps reduce duplicate counting caused by PCR amplification, but UMI collisions, sequencing errors, and molecule loss can still affect it. The result is therefore a technical estimate of the number of original molecules.
 3. Ambient RNA released from broken cells into the suspension can also enter a GEM that contains a cell and receive that partition's barcode. A barcode can therefore trace a reaction partition, but it cannot prove that every RNA molecule in the partition came from the intact cell inside it. A later quality-control lesson will cover how to identify and remove ambient RNA contamination.
 
-## 4. A Six-Step Workflow Using 10x 3′ Gene Expression as an Example
+## A Six-Step Workflow Using 10x 3′ Gene Expression as an Example
 
 The key to 10x is not “putting intact cells into a sequencer.” A sequencer ultimately reads a prepared DNA library. Long before sequencing begins, the cells have been lysed and their RNA converted into labeled cDNA.
 
@@ -159,7 +159,7 @@ Some positions in a sequencing read contain the cell barcode and UMI, while othe
 
 Only at this point have we moved from a tube of tissue to a numerical table that can be analyzed.
 
-## 5. What Do 3′, 5′, and “Full Length” Actually Mean?
+## What Do 3′, 5′, and “Full Length” Actually Mean?
 
 An RNA chain has a direction, and its two ends are called the 5′ end and the 3′ end. At this stage, you do not need to remember the numbering of the carbon atoms. You only need to know that **these are two different directions along the same RNA molecule.**
 
@@ -175,7 +175,7 @@ The 5′ assay is common in immunology because researchers can build an addition
 
 [Official 10x 3′ information](https://www.10xgenomics.com/support/universal-three-prime-gene-expression) · [Official 10x 5′ information](https://www.10xgenomics.com/support/universal-five-prime-gene-expression)
 
-## 6. What Are the Main Differences Among 10x, BD, and Singleron?
+## What Are the Main Differences Among 10x, BD, and Singleron?
 
 There are many platform names, but begin with one shared question: **How does each platform separate cells and give the RNA in every partition a traceable label?**
 
@@ -201,7 +201,7 @@ Raw Singleron data are usually processed with CeleScope, or another independent 
 
 No platform is universally better outside the context of a research question. Tissue type, dissociation method, reagent version, sequencing depth, and software parameters can all change the number and proportions of detected cells and the number of detected genes.
 
-## 7. Why Are Neutrophils Often Used as an Example of Platform Bias?
+## Why Are Neutrophils Often Used as an Example of Platform Bias?
 
 Neutrophils are white blood cells involved in innate immunity. They contain relatively little mRNA, contain many enzymes that can degrade RNA, and are easily damaged during handling. A chain of problems can therefore occur:
 
@@ -215,7 +215,7 @@ The correct conclusion is therefore not “BD can measure neutrophils, but 10x c
 
 [Platform comparison in human prostate tissue](https://doi.org/10.1016/j.heliyon.2024.e28358) · [Platform comparison in mouse tumor tissue](https://doi.org/10.1016/j.heliyon.2024.e37185) · [Study of neutrophil identification in 10x data](https://doi.org/10.4049/jimmunol.2200154)
 
-## 8. Next Step: From Public Data to an Expression Matrix
+## Next Lesson, 1.2: From Public Data to an Expression Matrix
 
 A sequencer first produces base sequences and their associated quality information. FASTQ is a common delivery format. Public studies may also deposit raw sequencing data in the NCBI Sequence Read Archive (SRA). The conceptual chain is then:
 
@@ -233,11 +233,11 @@ Cell Ranger is not “the whole of single-cell downstream analysis.” For class
 
 Cell Ranger usually provides both a raw matrix and a filtered matrix. The raw matrix retains more barcodes, whereas the filtered matrix retains only barcodes classified as cells by the software's cell-calling rules. Low-RNA cells may be absent from the filtered matrix. The practical lessons will therefore inspect both matrices, the quality report, the reference genome and annotation versions, the reagent chemistry, the software version, and the cell-calling parameters.
 
-An arbitrary SRA file also cannot be passed directly into Cell Ranger. Before processing, you must confirm that the data truly came from a compatible 10x experiment and determine the read structure, reference genome, reagent version, and relationships among samples. **A later practical lesson will begin with a public dataset and work through SRA → FASTQ → Cell Ranger step by step. You do not need to memorize any commands in this chapter.**
+An arbitrary SRA file also cannot be passed directly into Cell Ranger. Before processing, you must confirm that the data truly came from a compatible 10x experiment and determine the read structure, reference genome, reagent version, and relationships among samples. **Lesson 1.2 will begin with a public dataset and cover SRA identification, FASTQ quality control, the Cell Ranger workflow, and its output files. You do not need to memorize any commands in this lesson.**
 
 [Official introduction to NCBI SRA](https://www.ncbi.nlm.nih.gov/sra) · [Official Cell Ranger documentation](https://www.10xgenomics.com/support/software/cell-ranger/latest)
 
-## Chapter Summary
+## Lesson Summary
 
 - Single-cell RNA sequencing does not photograph a cell. It captures RNA as cells are lysed and adds labels before cDNA from different sources is mixed.
 - A cell barcode traces a reaction partition, a UMI helps estimate the number of original RNA molecules captured, and a sample index distinguishes different libraries.

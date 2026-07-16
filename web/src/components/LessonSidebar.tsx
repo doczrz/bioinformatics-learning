@@ -48,7 +48,9 @@ export function LessonSidebar({
                 aria-current={lesson.id === lessonId ? "page" : undefined}
                 onClick={() => onSelectLesson(lesson.id)}
               >
-                <span className="lesson-number">{String(index + 1).padStart(2, "0")}</span>
+                <span className="lesson-number">
+                  {lesson.number ?? String(index + 1).padStart(2, "0")}
+                </span>
                 <span>{lesson.title[language]}</span>
               </button>
             </li>
