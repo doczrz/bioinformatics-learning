@@ -1,4 +1,0 @@
-interface:
-  display_name: "Bilingual Textbook"
-  short_description: "Open and study a bilingual Codex textbook"
-  default_prompt: "Use $bilingual-textbook to open the course and continue from my saved position."
