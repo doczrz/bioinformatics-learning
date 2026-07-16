@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.1.0",
-  "revision": 1,
+  "contentVersion": "0.2.0",
+  "revision": 2,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",
@@ -15,6 +15,14 @@
       "title": {
         "zh": "开始阅读",
         "en": "Start reading"
+      }
+    },
+    {
+      "id": "scrna-seq-foundations",
+      "order": 2,
+      "title": {
+        "zh": "第一章 单细胞 RNA 测序：历史、原理与平台",
+        "en": "Chapter 1 Single-cell RNA sequencing: history, principles, and platforms"
       }
     }
   ],
