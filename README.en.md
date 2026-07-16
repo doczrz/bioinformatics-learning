@@ -21,22 +21,111 @@ Current boundaries:
 
 ## Quick start
 
+The steps below use Windows 10/11 and are written for readers who have never used a command line. Enter each command separately in Command Prompt and press `Enter`. If a tool is already installed, you can skip its installation step.
+
 ### Requirements
 
-- Git
-- Node.js 20 or later
-- pnpm
+- [Git](https://git-scm.com/install/windows), used to download the project from GitHub.
+- [Node.js](https://nodejs.org/en/download) 20.19.0–20.x, or 22.12.0 and later, used to run the web development tools. For a new installation, choose the current LTS (Long-Term Support) release.
+- [pnpm 10.24.0](https://pnpm.io/10.x/installation), used to install dependencies and start the website. This project pins that version.
+
+### Windows: first-time setup
+
+#### 1. Open Command Prompt
+
+1. Press the `Win` and `R` keys together.
+2. Enter `cmd` in the Run window.
+3. Press `Enter` to open the black Command Prompt window.
+
+Run all commands below in that window, not in a browser address bar. Do not copy the prompt before a command, such as `C:\Users\your-name>`. After installing a new tool, close the old Command Prompt window and open it again so that Windows can find the new command.
+
+#### 2. Install and check Git
+
+1. Open the official [Git for Windows download page](https://git-scm.com/install/windows). Most Windows computers use the x64 installer; Windows on Arm devices use ARM64.
+2. Run the downloaded installer. The default options are suitable for this project.
+3. Open a new Command Prompt window and run:
+
+```bat
+git --version
+```
+
+Git is ready if the output begins with something similar to `git version 2.x.x`.
+
+#### 3. Install and check Node.js
+
+1. Open the official [Node.js download page](https://nodejs.org/en/download).
+2. Select the current LTS release and the Windows Installer (`.msi`). This project supports Node.js 20.19.0–20.x, or 22.12.0 and later.
+3. Run the installer with its default options. npm is installed together with Node.js; when installation finishes, open a new Command Prompt window.
+4. Run these commands one at a time:
+
+```bat
+node --version
+npm --version
+```
+
+The first result should show a supported version, such as `v24.18.0`. If you use Node.js 20, it must be at least `v20.19.0`; if you use Node.js 22 or later, it must be at least `v22.12.0`. The second command should show the npm version.
+
+#### 4. Install and check pnpm
+
+After Node.js is installed, run:
+
+```bat
+npm install --global pnpm@10.24.0
+pnpm --version
+```
+
+The first command downloads pnpm and may take a little time. The second should print `10.24.0`. If Windows still reports that `pnpm` is not recognized, close Command Prompt, open it again, and rerun `pnpm --version`.
 
 ### Run locally
 
-```bash
+The following example downloads the project to the current user's folder (usually similar to `C:\Users\your-name`). Run one line at a time in Command Prompt:
+
+```bat
+cd /d "%USERPROFILE%"
 git clone https://github.com/doczrz/bioinformatics-learning.git
 cd bioinformatics-learning
 pnpm --dir web install
 pnpm --dir web dev
 ```
 
-Vite will print a local address, usually similar to `http://localhost:5173/`. Open that address in a browser to start reading.
+You only need to run `git clone` when downloading the project for the first time. You normally need `pnpm --dir web install` only on the first run or after the dependencies change. After `pnpm --dir web dev` starts, Command Prompt remains occupied and Vite prints a local address, usually `http://localhost:5173/`. Copy that address into Chrome, Edge, or another browser to start reading. Keep Command Prompt open while reading; press `Ctrl+C` in that window when you want to stop the website. If Windows asks whether to terminate the batch job, enter `Y` and press `Enter`.
+
+If the project is already in a different folder, skip `git clone` and replace the example path below with the actual project location:
+
+```bat
+cd /d "C:\path\to\bioinformatics-learning"
+pnpm --dir web dev
+```
+
+If `git`, `node`, or `pnpm` is reported as an unrecognized command, open a new Command Prompt window and rerun the corresponding version check. If Vite uses a port other than `5173`, open the address that Command Prompt actually displays.
+
+### Open the textbook again later
+
+After the first installation, Git, Node.js, pnpm, and the downloaded project remain on your computer. You do not need to install them again or rerun `git clone`. Each time you want to read the textbook:
+
+1. Press `Win+R`, enter `cmd`, and press `Enter`.
+2. Run these commands one line at a time:
+
+```bat
+cd /d "%USERPROFILE%\bioinformatics-learning"
+pnpm --dir web dev
+```
+
+3. Wait for Command Prompt to display the `Local:` address, then copy that address into your browser.
+4. Keep Command Prompt open while reading and press `Ctrl+C` when you want to stop the server.
+
+If the project is not stored in the default location, replace the path in the first command with its actual location. You do not need to rerun `pnpm --dir web install` merely to continue reading.
+
+To download the latest program and textbook content published on GitHub before starting the website, run:
+
+```bat
+cd /d "%USERPROFILE%\bioinformatics-learning"
+git pull
+pnpm --dir web install
+pnpm --dir web dev
+```
+
+If `git pull` prints `Already up to date.`, the local copy is already current. Running `pnpm --dir web install` after an update ensures that any added or changed project dependencies are installed.
 
 ### Using the textbook
 
@@ -109,6 +198,37 @@ web/public/content/dev/      Bilingual course content bundled with the webpage
 src/codex_textbook/          Course validation and content-release tooling
 datasets/                    Dataset catalogue and source metadata
 ```
+
+## Licenses
+
+This repository licenses software and original educational material separately:
+
+- Source code, build configuration, release tooling, authoring templates, and
+  technical documentation are licensed under the [MIT License](LICENSE). This
+  includes software and tooling under `src/`, `web/src/`, `ui/`, and
+  `.codex/skills/`.
+- Project-original lesson text, course metadata, and educational figures are
+  licensed under [CC BY-SA 4.0](LICENSE-CC-BY-SA-4.0). This primarily covers
+  `web/public/content/dev/lessons/`, `web/public/content/dev/figures/`, and
+  project-original course catalogue information.
+- Project-authored executable code blocks in lessons are additionally
+  available under the MIT License unless stated otherwise beside the code.
+
+These licenses cover only material that project contributors have the right to
+license. Third-party software, cited publications, external websites, external
+datasets, trademarks, logos, and third-party material identified in a file,
+caption, or media record remain subject to their own terms. Linking to or
+citing a resource does not relicense it. A more specific notice in a file,
+caption, or media record takes precedence.
+
+When sharing or adapting material covered by CC BY-SA 4.0, a suggested credit
+is:
+
+> Bioinformatics Interactive Learning, doczrz and contributors,
+> https://github.com/doczrz/bioinformatics-learning, CC BY-SA 4.0.
+
+Include a link to the license and indicate whether changes were made. Adapted
+course material must remain under CC BY-SA 4.0 or a compatible license.
 
 ## Feedback
 
