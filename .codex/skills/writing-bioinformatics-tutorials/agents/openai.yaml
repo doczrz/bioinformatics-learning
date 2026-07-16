@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bioinformatics Tutorial Writer"
+  short_description: "Write beginner-friendly bilingual bioinformatics tutorials"
+  default_prompt: "Use $writing-bioinformatics-tutorials to turn my source text into a beginner tutorial and learner audit."
