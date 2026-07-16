@@ -654,6 +654,20 @@ a:focus-visible {
   border: 0;
 }
 
+@media (min-width: 1200px) {
+  .reading-canvas {
+    width: min(66.6667vw, 100%);
+    max-width: none;
+    padding-inline: clamp(48px, 4vw, 80px);
+  }
+
+  .lesson-reader,
+  .dataset-panel,
+  .inline-error {
+    max-width: none;
+  }
+}
+
 @media (max-width: 900px) {
   .course-header {
     grid-template-columns: auto minmax(0, 1fr) auto;

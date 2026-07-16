@@ -115,6 +115,8 @@ The real workflow begins when the sample is collected. The length of time a tiss
 
 Researchers use mechanical processing or enzymatic digestion to separate a tissue into individual cells as far as possible. The resulting liquid is called a **single-cell suspension**. Ideally, the cells remain intact and highly viable, with as few cell clumps, fragments, and free RNA molecules as possible.
 
+Before going further, ask one more question: how was this suspension prepared? The input suspension does not necessarily preserve every cell population found in the original sample. Earlier separation or enrichment steps may retain some cells while removing others. In blood samples, for example, red-blood-cell-depleted whole blood, peripheral blood mononuclear cells (PBMCs), and granulocyte-enriched samples contain different cell populations. PBMCs obtained by common density-gradient separation mainly contain lymphocytes and monocytes; most normal-density neutrophils are not collected in the PBMC layer. PBMC data therefore should not be treated as a complete representation of all white blood cells.
+
 This step affects which cells will eventually be observed. If one cell type breaks more easily during digestion, it may be underrepresented in the expression matrix. Digestion that continues for too long can also trigger a stress response and alter the cells' original RNA state.
 
 Intact cells are not the only possible starting point. For frozen samples, tissues that are difficult to dissociate, or cells easily damaged during dissociation, researchers may instead isolate nuclei and perform single-nucleus RNA sequencing (snRNA-seq). It shares many barcode principles with single-cell workflows, but the observable range of RNA, the proportion of intronic reads, and cell-type biases differ. A later lesson will compare these approaches directly.
@@ -205,6 +207,8 @@ Neutrophils are white blood cells involved in innate immunity. They contain rela
 
 > cells rupture during sample preparation → RNA is lost or enters the ambient solution → intact cells receive fewer UMIs → software classifies low-signal barcodes as empty droplets or low-quality cells
 
+Before attributing a bias to the platform, first determine whether the material loaded was red-blood-cell-depleted whole blood, PBMCs, or a granulocyte-enriched sample. If neutrophils were already removed during sample separation, neither the subsequent 10x or BD assay nor downstream cell-calling software can bring them back. In this situation, “no neutrophils detected” primarily reflects which cells were present in the input sample; it does not by itself show that the sequencing platform failed.
+
 Some direct comparisons performed with particular tissues, reagent versions, and analysis workflows have found that BD Rhapsody performs better at recovering some low-RNA cells or granulocytes and at counting their molecules. The same studies also found that 10x performed differently in productive cell capture, in the number of genes detected per cell, and across other cell types. Changing the cell-calling method—the decision about which barcodes belong to real cells—may also recover more neutrophils from 10x data.
 
 The correct conclusion is therefore not “BD can measure neutrophils, but 10x cannot.” Instead: **neutrophil results can be strongly affected by sample preparation, platform chemistry, and data processing at the same time.** If neutrophils are central to a study, these biases should be evaluated during experimental design, and their proportions should be validated with an independent method such as flow cytometry or tissue imaging.
@@ -240,14 +244,6 @@ An arbitrary SRA file also cannot be passed directly into Cell Ranger. Before pr
 - 10x separates cells using GEM droplets, while BD Rhapsody and the Singleron SCOPE-chip use microwells. Each approach can introduce its own capture biases.
 - 3′, 5′, and Smart-seq assays provide different ranges of information. Choose a method by starting with the research question, not by comparing platform names alone.
 - Sequencing is not the end of the analysis. Raw data must still be processed by software matched to the experimental system before a gene-by-cell expression matrix can be produced.
-
-## Check Whether You Really Understand
-
-1. If RNA from all cells has already been mixed and no source label was added beforehand, why is it difficult to determine which cell an RNA molecule came from after sequencing?
-2. If two cells accidentally enter one GEM, why can the cell barcode not separate them automatically? Why can a UMI not solve this problem either?
-3. After receiving a public FASTQ file, why should you not immediately assume that Cell Ranger can process it? What information must you confirm before beginning the analysis?
-
-If you can answer these questions without reciting terms—by following the sequence “partition → label → mix → sequence → sort”—you have the conceptual foundation needed to begin practical data processing.
 
 ## References and Further Reading
 
