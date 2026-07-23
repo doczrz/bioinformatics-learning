@@ -164,8 +164,7 @@ a:focus-visible {
   padding: 0 8px;
 }
 
-.lesson-sidebar h2,
-.environment-status h2 {
+.lesson-sidebar h2 {
   margin: 0 0 14px;
   color: var(--ink-soft);
   font-size: 0.72rem;
@@ -183,6 +182,48 @@ a:focus-visible {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.lesson-module {
+  margin-bottom: 14px;
+  padding: 0 0 10px 6px;
+  border-left: 2px solid var(--sequence);
+}
+
+.lesson-sidebar .lesson-module-toggle {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 16px;
+  align-items: start;
+  gap: 8px;
+  min-height: auto;
+  padding: 2px 8px 8px;
+  border-radius: 6px;
+}
+
+.lesson-module-number {
+  color: var(--sequence);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.lesson-module-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+}
+
+.lesson-module-action {
+  justify-self: end;
+  color: var(--sequence);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .lesson-sidebar li button {
@@ -214,31 +255,6 @@ a:focus-visible {
   color: var(--ink-soft);
   font-family: var(--font-mono);
   font-size: 0.68rem;
-}
-
-.environment-status {
-  padding: 20px 8px 0;
-  border-top: 1px solid var(--rule);
-}
-
-.environment-status button {
-  width: 100%;
-  min-height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 6px;
-  padding: 0 10px;
-  border: 1px solid var(--rule);
-  border-radius: 7px;
-  background: var(--paper);
-  color: var(--ink-soft);
-  text-align: left;
-}
-
-.environment-status small {
-  color: var(--sequence);
-  font-size: 0.66rem;
 }
 
 .sequence-rail {

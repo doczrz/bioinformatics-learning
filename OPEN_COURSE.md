@@ -20,6 +20,6 @@ The textbook is now a standalone full-viewport browser page. Open the local URL 
 
 The page supports whole-page language switching, lesson navigation, code copying, and authoritative external dataset links. An installed Chrome AI sidebar can be used independently for questions; the textbook does not send selected text itself.
 
-在线内容仓库尚未配置时，页面继续使用内置占位内容，并明确显示“尚未配置在线内容仓库”。本地 R、本地 Python 与 SSH/HPC 目前均为“待接入”的禁用入口，不执行代码或连接服务器。
+在线内容仓库尚未配置时，页面继续使用内置占位内容，并明确显示“尚未配置在线内容仓库”。教材页面不提供本地 R、本地 Python 或 SSH/HPC 执行入口，也不执行代码或连接服务器。
 
-See `web/README.md` for hosting, public GitHub content-release, cache, and future Biolearning Runner boundaries.
+See `web/README.md` for hosting, public GitHub content-release, cache, and webpage execution boundaries.

@@ -1,6 +1,6 @@
 # $course_title
 
-[中文](START_HERE.zh.md) · [Datasets](datasets/CATALOG.en.md) · [Updates and environment](COURSE_STATUS.en.md)
+[中文](START_HERE.zh.md) · [Datasets](datasets/CATALOG.en.md) · [Updates](COURSE_STATUS.en.md)
 
 > Content version: $version
 
@@ -12,10 +12,6 @@ $continue_block
 
 $lesson_table
 
-## Execution interfaces
-
-- Local R: unavailable in version 1 (reserved and disabled; no execution capability)
-- Local Python: unavailable in version 1 (reserved and disabled; no execution capability)
-- SSH/HPC: unavailable in version 1 (reserved and disabled; no execution capability)
+## Learning support
 
 Use Codex native conversation to cite a lesson or code block, paste selected text, and ask freely.

@@ -16,8 +16,7 @@ Current boundaries:
 
 - Whole-page Chinese/English switching, lesson navigation, Markdown, code blocks, images, and external data links are supported.
 - The online course-content repository has not yet been configured, so “Check for updates” reports that status explicitly.
-- Local R, Local Python, and SSH/HPC are reserved interfaces only. They cannot currently execute code or connect to a server.
-- Reading the textbook does not require ChatGPT, a Codex plugin, or Biolearning Runner.
+- Reading the textbook does not require ChatGPT or a Codex plugin; the webpage itself does not execute R, Python, or SSH commands.
 
 ## Quick start
 
@@ -188,7 +187,7 @@ pnpm --dir web build
 pnpm --dir web preview
 ```
 
-The production files are written to `web/dist/` and can be deployed to any static host that supports HTTPS. For technical details about content releases, caching, and the future Runner boundary, see [`web/README.md`](web/README.md).
+The production files are written to `web/dist/` and can be deployed to any static host that supports HTTPS. For technical details about content releases, caching, and the webpage execution boundary, see [`web/README.md`](web/README.md).
 
 ## Repository structure
 

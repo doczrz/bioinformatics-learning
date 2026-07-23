@@ -6,7 +6,6 @@ import { CachedContentProvider } from "./content/cached-content-provider";
 import { StaticContentProvider } from "./content/static-content-provider";
 import { siteConfigSchema } from "./schemas";
 import { BrowserStateStore } from "./state/browser-state-store";
-import { NullExecutionRunner } from "./runtime/null-execution-runner";
 import { IndexedDbContentCache } from "./updates/indexeddb-content-cache";
 import { ContentUpdateService } from "./updates/update-service";
 
@@ -44,7 +43,6 @@ async function start() {
         contentProvider={contentProvider}
         stateStore={new BrowserStateStore()}
         updateService={updateService}
-        runner={new NullExecutionRunner()}
       />
     </StrictMode>,
   );

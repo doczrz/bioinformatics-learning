@@ -57,11 +57,6 @@ export class StaticContentProvider implements ContentProvider {
       defaultLanguage: course.defaultLanguage,
       title: course.title,
       lessons: [...course.lessons].sort((left, right) => left.order - right.order),
-      environments: [
-        { id: "local-r", status: "reserved" },
-        { id: "local-python", status: "reserved" },
-        { id: "ssh-hpc", status: "reserved" },
-      ],
     };
   }
 

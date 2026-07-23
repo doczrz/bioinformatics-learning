@@ -44,6 +44,6 @@ The webpage source repository may remain private, but every compiled HTML, CSS, 
 
 ## Execution boundary
 
-Biolearning Runner is reserved as a TypeScript interface only. Local R, Local Python, and SSH/HPC remain disabled and the default runner performs no network, process, storage, environment-detection, or credential operation. Installing a Runner is not required to read or update the textbook.
+The reader exposes no Local R, Local Python, or SSH/HPC execution controls. It does not run code, start processes, inspect environments, connect to remote servers, or handle credentials. Reading and updating the textbook require no separate execution service.
 
 A Chrome AI sidebar, if the learner has installed one, is independent of this page. Selecting text and asking through that sidebar does not give the webpage or the sidebar direct access to R, Python, SSH, or server credentials.

@@ -1,4 +1,4 @@
-# Updates and environment
+# Update status
 
 [← Course home](START_HERE.en.md)
 
@@ -15,9 +15,3 @@
 $changes
 
 An update runs only after user confirmation. `.course-state/`, `my-notes/`, and downloaded data must not be overwritten.
-
-## Environment capabilities
-
-- Local R: unavailable in version 1 (reserved and disabled; no execution capability)
-- Local Python: unavailable in version 1 (reserved and disabled; no execution capability)
-- SSH/HPC: unavailable in version 1 (reserved and disabled; no execution capability)

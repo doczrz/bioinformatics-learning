@@ -18,11 +18,6 @@ import {
   type ReaderState,
 } from "./state/browser-state-store";
 import type { ContentUpdateClient } from "./updates/update-service";
-import {
-  type ExecutionRunner,
-  type RunnerStatus,
-  unavailableRunnerStatus,
-} from "./runtime/execution-runner";
 import "./styles/tokens.css";
 import "./styles/textbook.css";
 
@@ -30,7 +25,6 @@ interface TextbookAppProps {
   contentProvider: ContentProvider;
   stateStore: BrowserStateStore;
   updateService?: ContentUpdateClient;
-  runner?: ExecutionRunner;
 }
 
 type Theme = "light" | "dark";
@@ -47,7 +41,6 @@ export function TextbookApp({
   contentProvider,
   stateStore,
   updateService,
-  runner,
 }: TextbookAppProps) {
   const initialState = useMemo(() => stateStore.read(), [stateStore]);
   const [readerState, setReaderState] = useState<ReaderState>(initialState);
@@ -60,9 +53,6 @@ export function TextbookApp({
   const [checkingForUpdates, setCheckingForUpdates] = useState(false);
   const [applyingUpdate, setApplyingUpdate] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-  const [environmentStatus, setEnvironmentStatus] = useState<RunnerStatus>({
-    ...unavailableRunnerStatus,
-  });
   const requestSequence = useRef(0);
 
   const persistState = useCallback(
@@ -112,22 +102,6 @@ export function TextbookApp({
     media.addEventListener("change", updateTheme);
     return () => media.removeEventListener("change", updateTheme);
   }, []);
-
-  useEffect(() => {
-    let active = true;
-    if (!runner) return;
-    void runner.getStatus().then(
-      (status) => {
-        if (active) setEnvironmentStatus(status);
-      },
-      () => {
-        if (active) setEnvironmentStatus({ ...unavailableRunnerStatus });
-      },
-    );
-    return () => {
-      active = false;
-    };
-  }, [runner]);
 
   useEffect(() => {
     document.documentElement.lang = readerState.language;
@@ -275,7 +249,6 @@ export function TextbookApp({
           open={readerState.sidebarOpen}
           onClose={() => persistState({ ...readerState, sidebarOpen: false })}
           onSelectLesson={selectLesson}
-          environmentStatus={environmentStatus}
         />
         <aside
           className="sequence-rail"

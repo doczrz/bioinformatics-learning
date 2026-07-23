@@ -15,10 +15,6 @@ export interface CourseIndex {
   defaultLanguage: Language;
   title: Record<Language, string>;
   lessons: LessonSummary[];
-  environments: Array<{
-    id: "local-r" | "local-python" | "ssh-hpc";
-    status: "reserved";
-  }>;
 }
 
 export interface LessonPayload {
