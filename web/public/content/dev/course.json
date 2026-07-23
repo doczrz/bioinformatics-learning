@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.3.0",
-  "revision": 4,
+  "contentVersion": "0.4.0",
+  "revision": 5,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",
@@ -19,8 +19,17 @@
       }
     },
     {
-      "id": "scrna-seq-foundations",
+      "id": "software-packages-environments",
       "order": 2,
+      "number": "0.2",
+      "title": {
+        "zh": "为什么已经安装了 R 或 Python 仍然跑不动？软件包、环境、依赖与版本",
+        "en": "Why can code still fail after R or Python is installed? Packages, environments, dependencies, and versions"
+      }
+    },
+    {
+      "id": "scrna-seq-foundations",
+      "order": 3,
       "number": "1.1",
       "title": {
         "zh": "单细胞 RNA 测序：历史、原理与平台",
