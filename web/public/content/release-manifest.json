@@ -1,126 +1,138 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.4.0",
-  "releaseTag": "content-v0.4.0",
-  "commitSha": "64b7fd4f9a592d179fcd0c754a089e1bcf250f50",
+  "contentVersion": "0.5.0",
+  "releaseTag": "content-v0.5.0",
+  "commitSha": "ad61734d428dbce09c445345b25432ba3744c56a",
   "minimumUiVersion": "0.1.0",
   "summary": {
-    "zh": "课程 0.4.0：新增软件包、计算环境、依赖与版本基础",
-    "en": "Course 0.4.0: add package, environment, dependency, and version foundations"
+    "zh": "课程 0.5.0：新增 R 基本语法与 AI 代码阅读基础",
+    "en": "Course 0.5.0: add R syntax and AI-assisted code-reading foundations"
   },
   "assets": [
     {
       "path": "course.json",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/course.json",
-      "sizeBytes": 1450,
-      "sha256": "5aebb3551c6ff5e13f0903460e214b8e939a1a9ea280c06ed8bb03a63c5b8e88"
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/course.json",
+      "sizeBytes": 1759,
+      "sha256": "0bf77b8b2bc6c1549d7eeaa9be14ad8972156e87d6ea991207f3eb7952f63f90"
     },
     {
       "path": "figures/bioinformatics-computing-layers.en.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/bioinformatics-computing-layers.en.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/bioinformatics-computing-layers.en.media.md",
       "sizeBytes": 2021,
       "sha256": "7608d832ca8779f3dd03bc11b2c112f6e88e1e4b6144b810a53f26915a6726cb"
     },
     {
       "path": "figures/bioinformatics-computing-layers.en.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/bioinformatics-computing-layers.en.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/bioinformatics-computing-layers.en.png",
       "sizeBytes": 1550515,
       "sha256": "9ffaedd6976723b73d947095a93cb75508bdbd4d032533a48268f7bd1a2b6258"
     },
     {
       "path": "figures/bioinformatics-computing-layers.zh.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/bioinformatics-computing-layers.zh.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/bioinformatics-computing-layers.zh.media.md",
       "sizeBytes": 2613,
       "sha256": "f5ab86e752fcc0431246fc64479233b21487214870408775b17435c6d93b9b99"
     },
     {
       "path": "figures/bioinformatics-computing-layers.zh.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/bioinformatics-computing-layers.zh.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/bioinformatics-computing-layers.zh.png",
       "sizeBytes": 1246380,
       "sha256": "55e018648f5203d5a4975a537d79e1919fd65c2497b10fc78d5e8c97708db8ad"
     },
     {
       "path": "figures/computational-environment-layers.en.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/computational-environment-layers.en.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/computational-environment-layers.en.media.md",
       "sizeBytes": 2467,
       "sha256": "fa91bd3ccd237650132c1eaaa9baa47b9cb9c538f079d25625dc41fe22a173e3"
     },
     {
       "path": "figures/computational-environment-layers.en.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/computational-environment-layers.en.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/computational-environment-layers.en.png",
       "sizeBytes": 1374306,
       "sha256": "0193c4f06d20891c408c25615962dc2e61e527e161f3b48c87610b6b36fbd19a"
     },
     {
       "path": "figures/computational-environment-layers.zh.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/computational-environment-layers.zh.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/computational-environment-layers.zh.media.md",
       "sizeBytes": 3300,
       "sha256": "0312171723a31edb3e0a4249b2d6b0f23385231b8c7b81168a56e6cdb1cab6db"
     },
     {
       "path": "figures/computational-environment-layers.zh.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/computational-environment-layers.zh.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/computational-environment-layers.zh.png",
       "sizeBytes": 1337320,
       "sha256": "26a3b3069be6f6a5641854fabfb46669ec816780cfffc3d0c94d3a0f1128a812"
     },
     {
       "path": "figures/scrna-seq-gem-workflow.en.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/scrna-seq-gem-workflow.en.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/scrna-seq-gem-workflow.en.media.md",
       "sizeBytes": 5399,
       "sha256": "0b93bd49339b568397bdd1d3deb71a7032b70131ab3b16bbd42cb3bb02081b54"
     },
     {
       "path": "figures/scrna-seq-gem-workflow.en.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/scrna-seq-gem-workflow.en.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/scrna-seq-gem-workflow.en.png",
       "sizeBytes": 1790590,
       "sha256": "6a773819e56edc701d135212f2324c0624029bb3716c2641d22962b0ef3f4ceb"
     },
     {
       "path": "figures/scrna-seq-gem-workflow.zh.media.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/scrna-seq-gem-workflow.zh.media.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/scrna-seq-gem-workflow.zh.media.md",
       "sizeBytes": 6632,
       "sha256": "c627cc7179e6908c339ab5ec8ef92969c3dd0780c658c86cc1cd7db3027b44db"
     },
     {
       "path": "figures/scrna-seq-gem-workflow.zh.png",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/figures/scrna-seq-gem-workflow.zh.png",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/figures/scrna-seq-gem-workflow.zh.png",
       "sizeBytes": 1900539,
       "sha256": "4dfbd054bc8689169fd699b1e28bf2154a8e6fd0030d6e58d7af2ae2bc872eb7"
     },
     {
       "path": "lessons/bioinformatics-computing-foundations.en.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/bioinformatics-computing-foundations.en.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/bioinformatics-computing-foundations.en.md",
       "sizeBytes": 15836,
       "sha256": "670b899b470b52664c4249da9e35e2c2936baf0dfac2aed89a37965a558c6656"
     },
     {
       "path": "lessons/bioinformatics-computing-foundations.zh.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/bioinformatics-computing-foundations.zh.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/bioinformatics-computing-foundations.zh.md",
       "sizeBytes": 14019,
       "sha256": "270262786f9f8b864ce84cd36f32482423c1493398eca9e306d14a50a5472410"
     },
     {
+      "path": "lessons/r-code-reading-basics.en.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/r-code-reading-basics.en.md",
+      "sizeBytes": 35137,
+      "sha256": "7bf0385c3f3feeff28980ad719a4a4afb727425d95d349eb95d74980b022ed0b"
+    },
+    {
+      "path": "lessons/r-code-reading-basics.zh.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/r-code-reading-basics.zh.md",
+      "sizeBytes": 29479,
+      "sha256": "f3d50f8da7beab317652bcf9e32710f663b6740bcf73a42cb750a7d29cb5ba07"
+    },
+    {
       "path": "lessons/scrna-seq-foundations.en.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/scrna-seq-foundations.en.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/scrna-seq-foundations.en.md",
       "sizeBytes": 28938,
       "sha256": "0453ad90e17cf7a116282e892e8c282117f3125728957208d798c12788a6fd85"
     },
     {
       "path": "lessons/scrna-seq-foundations.zh.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/scrna-seq-foundations.zh.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/scrna-seq-foundations.zh.md",
       "sizeBytes": 24501,
       "sha256": "67d89e16c5a8305e8d16db418314e8d512789510924c20fefffe1879f5c15139"
     },
     {
       "path": "lessons/software-packages-environments.en.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/software-packages-environments.en.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/software-packages-environments.en.md",
       "sizeBytes": 18157,
       "sha256": "793f3ff0121ae17779d0effdda5df0ffddbba0fd46f534972e345ced7a1aaf24"
     },
     {
       "path": "lessons/software-packages-environments.zh.md",
-      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/64b7fd4f9a592d179fcd0c754a089e1bcf250f50/web/public/content/dev/lessons/software-packages-environments.zh.md",
+      "url": "https://raw.githubusercontent.com/doczrz/bioinformatics-learning/ad61734d428dbce09c445345b25432ba3744c56a/web/public/content/dev/lessons/software-packages-environments.zh.md",
       "sizeBytes": 15333,
       "sha256": "f9aeda06a9493e5fd369934d949ed17a84904ac1360890bd9c797a21884d905e"
     }
