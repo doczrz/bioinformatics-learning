@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.4.0",
-  "revision": 5,
+  "contentVersion": "0.5.0",
+  "revision": 6,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",
@@ -28,8 +28,17 @@
       }
     },
     {
-      "id": "scrna-seq-foundations",
+      "id": "r-code-reading-basics",
       "order": 3,
+      "number": "0.3",
+      "title": {
+        "zh": "可以不手写，但必须看得懂：R 基本语法与代码阅读",
+        "en": "You do not have to write it by hand, but you must understand it: R basics and code reading"
+      }
+    },
+    {
+      "id": "scrna-seq-foundations",
+      "order": 4,
       "number": "1.1",
       "title": {
         "zh": "单细胞 RNA 测序：历史、原理与平台",
