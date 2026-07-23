@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.2.1",
-  "revision": 3,
+  "contentVersion": "0.3.0",
+  "revision": 4,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",
@@ -10,8 +10,17 @@
   },
   "lessons": [
     {
-      "id": "scrna-seq-foundations",
+      "id": "bioinformatics-computing-foundations",
       "order": 1,
+      "number": "0.1",
+      "title": {
+        "zh": "为什么生物信息学常在 Linux 上运行？R、Python 与 Codex 分别做什么？",
+        "en": "Why does bioinformatics often run on Linux, and what do R, Python, and Codex each do?"
+      }
+    },
+    {
+      "id": "scrna-seq-foundations",
+      "order": 2,
       "number": "1.1",
       "title": {
         "zh": "单细胞 RNA 测序：历史、原理与平台",
