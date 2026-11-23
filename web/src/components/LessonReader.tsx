@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type ExtraProps } from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 
 import type { ContentProvider } from "../content/content-provider";
+import { parseSections } from "../content/markdown";
 import type { Language, LessonPayload } from "../contracts";
 import { CodeBlock } from "./CodeBlock";
+import "../styles/reader.css";
 
 interface LessonReaderProps {
   lesson: LessonPayload;
@@ -23,7 +25,6 @@ export function LessonReader({
   if (!lesson.translationAvailable) {
     return (
       <main className="lesson-reader translation-missing" id="lesson-content">
-        <span className="section-eyebrow">TRANSLATION</span>
         <h1>{lesson.title}</h1>
         <p>
           {isChinese
@@ -34,11 +35,15 @@ export function LessonReader({
     );
   }
 
-  let headingIndex = 0;
+  const sections = lesson.sections.some(section => section.line === undefined)
+    ? parseSections(lesson.markdown).map((section, index) => ({
+        ...section, id: lesson.sections[index]?.id ?? section.id,
+      }))
+    : lesson.sections;
+  const sectionIds = new Map(sections.map(section => [section.line, section.id]));
   function heading(Tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-    return function MarkdownHeading({ children }: { children?: ReactNode }) {
-      const section = lesson.sections[headingIndex++];
-      return <Tag id={section?.id}>{children}</Tag>;
+    return function MarkdownHeading({ node, children }: ExtraProps & { children?: ReactNode }) {
+      return <Tag id={sectionIds.get(node?.position?.start.line)}>{children}</Tag>;
     };
   }
 
@@ -49,10 +54,6 @@ export function LessonReader({
       data-lesson-id={lesson.lessonId}
       tabIndex={-1}
     >
-      <div className="lesson-meta">
-        <span>{isChinese ? "课程正文" : "Lesson"}</span>
-        <code>{lesson.lessonId}</code>
-      </div>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeSanitize]}
@@ -64,22 +65,19 @@ export function LessonReader({
           h4: heading("h4"),
           h5: heading("h5"),
           h6: heading("h6"),
-          pre: ({ children }: { children?: ReactNode }) => <>{children}</>,
-          code: ({ className, children, ...properties }) => {
-            const code = String(children).replace(/\n$/, "");
-            const languageLabel = /language-([^ ]+)/.exec(className ?? "")?.[1];
-            return languageLabel ? (
-              <CodeBlock
-                code={code}
-                languageLabel={languageLabel}
-                interfaceLanguage={language}
-              />
-            ) : (
-              <code className="inline-code" {...properties}>
-                {children}
-              </code>
-            );
+          pre: ({ node, children }) => {
+            const code = node?.children[0];
+            if (code?.type !== "element" || code.tagName !== "code") return <pre>{children}</pre>;
+            const value = code.children.map(child => child.type === "text" ? child.value : "").join("");
+            const languageLabel = /language-([\w+-]+)/.exec(String(code.properties.className ?? ""))?.[1];
+            return <CodeBlock code={value.replace(/\n$/, "")} languageLabel={languageLabel ?? "text"} interfaceLanguage={language} />;
           },
+          code: ({ children }) => <code className="inline-code">{children}</code>,
+          table: ({ children }) => (
+            <div className="lesson-table-wrap" tabIndex={0} role="region" aria-label={isChinese ? "表格" : "Table"}>
+              <table>{children}</table>
+            </div>
+          ),
           a: ({ href, children }) => {
             const external = Boolean(href && /^https?:\/\//i.test(href));
             return (

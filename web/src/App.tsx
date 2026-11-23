@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { ContentProvider } from "./content/content-provider";
 import type {
@@ -9,6 +9,7 @@ import type {
   UpdateCheckResult,
 } from "./contracts";
 import { CourseHeader } from "./components/CourseHeader";
+import { CourseCatalog } from "./components/CourseCatalog";
 import { DatasetPanel } from "./components/DatasetPanel";
 import { LessonReader } from "./components/LessonReader";
 import { LessonSidebar } from "./components/LessonSidebar";
@@ -29,12 +30,17 @@ interface TextbookAppProps {
 
 type Theme = "light" | "dark";
 
+function lessonInUrl(lastLesson: string | null) {
+  return new URLSearchParams(window.location.search).get("lesson")
+    ?? (window.location.hash ? lastLesson ?? "" : null);
+}
+
 function preferredTheme(): Theme {
-  return typeof window !== "undefined" &&
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  try {
+    return window.localStorage.getItem("biolearning.theme") === "dark" ? "dark" : "light";
+  } catch {
+    return "light";
+  }
 }
 
 export function TextbookApp({
@@ -44,6 +50,8 @@ export function TextbookApp({
 }: TextbookAppProps) {
   const initialState = useMemo(() => stateStore.read(), [stateStore]);
   const [readerState, setReaderState] = useState<ReaderState>(initialState);
+  const [requestedLesson, setRequestedLesson] = useState(() => lessonInUrl(initialState.lessonId));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [course, setCourse] = useState<CourseIndex | null>(null);
   const [lesson, setLesson] = useState<LessonPayload | null>(null);
   const [datasets, setDatasets] = useState<DatasetEntry[]>([]);
@@ -53,59 +61,55 @@ export function TextbookApp({
   const [checkingForUpdates, setCheckingForUpdates] = useState(false);
   const [applyingUpdate, setApplyingUpdate] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-  const requestSequence = useRef(0);
+  const language = readerState.language;
+  const zh = language === "zh";
+  const selected = requestedLesson === "" ? course?.lessons[0]
+    : course?.lessons.find((entry) => entry.id === requestedLesson);
+  const currentLesson = lesson && lesson.lessonId === selected?.id && lesson.language === language ? lesson : null;
+  const headings = currentLesson?.sections.filter((section) => section.level === 2) ?? [];
 
-  const persistState = useCallback(
-    (next: ReaderState) => {
-      setReaderState(next);
-      stateStore.write(next);
-    },
-    [stateStore],
-  );
-
-  const loadLesson = useCallback(
-    async (
-      currentCourse: CourseIndex,
-      lessonId: string,
-      language: Language,
-      nextState: ReaderState,
-    ) => {
-      const sequence = ++requestSequence.current;
-      setError(null);
-      try {
-        const [nextLesson, nextDatasets] = await Promise.all([
-          contentProvider.getLesson(lessonId, language),
-          contentProvider.getDatasets(language),
-        ]);
-        if (sequence !== requestSequence.current) return;
-        setLesson(nextLesson);
-        setDatasets(nextDatasets);
-        persistState(nextState);
-      } catch (caught) {
-        if (sequence !== requestSequence.current) return;
-        setError(
-          caught instanceof Error ? caught.message : "The lesson could not be loaded.",
-        );
-      }
-    },
-    [contentProvider, persistState],
-  );
+  function closeSidebar() {
+    setSidebarOpen(false);
+    document.querySelector<HTMLButtonElement>('[aria-controls="lesson-sidebar"]')?.focus();
+  }
 
   useEffect(() => {
-    const media = typeof window.matchMedia === "function"
-      ? window.matchMedia("(prefers-color-scheme: dark)")
-      : null;
-    if (!media) return;
-    const updateTheme = (event: MediaQueryListEvent) => {
-      setTheme(event.matches ? "dark" : "light");
+    stateStore.write(readerState);
+  }, [readerState, stateStore]);
+
+  useEffect(() => {
+    const syncLocation = () => {
+      setRequestedLesson(lessonInUrl(stateStore.read().lessonId));
+      setSidebarOpen(false);
     };
-    media.addEventListener("change", updateTheme);
-    return () => media.removeEventListener("change", updateTheme);
-  }, []);
+    window.addEventListener("popstate", syncLocation);
+    return () => window.removeEventListener("popstate", syncLocation);
+  }, [stateStore]);
+
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    document.querySelector<HTMLButtonElement>(".sidebar-close")?.focus();
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeSidebar();
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [sidebarOpen]);
+
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    try { window.localStorage.setItem("biolearning.theme", next); }
+    catch { /* The current session still uses the selected theme. */ }
+  }
 
   useEffect(() => {
     document.documentElement.lang = readerState.language;
   }, [readerState.language]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => {
     let active = true;
@@ -114,17 +118,6 @@ export function TextbookApp({
         const nextCourse = await contentProvider.getCourse();
         if (!active) return;
         setCourse(nextCourse);
-        const lessonId =
-          nextCourse.lessons.find((item) => item.id === initialState.lessonId)?.id ??
-          nextCourse.lessons[0]?.id;
-        if (!lessonId) {
-          setError("The course does not contain any lessons.");
-          return;
-        }
-        await loadLesson(nextCourse, lessonId, initialState.language, {
-          ...initialState,
-          lessonId,
-        });
       } catch (caught) {
         if (!active) return;
         setError(
@@ -136,25 +129,53 @@ export function TextbookApp({
     return () => {
       active = false;
     };
-  }, [contentProvider, initialState, loadLesson]);
+  }, [contentProvider]);
+
+  useEffect(() => {
+    let active = true;
+    setError(null);
+    if (!selected) {
+      setLesson(null);
+      return;
+    }
+    async function readLesson(id: string) {
+      try {
+        const [nextLesson, nextDatasets] = await Promise.all([
+          contentProvider.getLesson(id, language),
+          contentProvider.getDatasets(language),
+        ]);
+        if (!active) return;
+        setLesson(nextLesson);
+        setDatasets(nextDatasets);
+        setReaderState((state) => state.lessonId === id ? state : { ...state, lessonId: id });
+      } catch (caught) {
+        if (active) setError(caught instanceof Error ? caught.message : "The lesson could not be loaded.");
+      }
+    }
+    void readLesson(selected.id);
+    return () => { active = false; };
+  }, [selected, language, contentProvider]);
+
+  useEffect(() => {
+    if (!lesson || lesson.lessonId !== selected?.id) return;
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target) target.scrollIntoView();
+  }, [lesson, selected]);
 
   function changeLanguage(language: Language) {
-    if (!course || !readerState.lessonId || language === readerState.language) return;
-    void loadLesson(course, readerState.lessonId, language, {
-      ...readerState,
-      language,
-      sidebarOpen: false,
-    });
+    setReaderState((state) => ({ ...state, language }));
+    setSidebarOpen(false);
   }
 
-  function selectLesson(lessonId: string) {
-    if (!course || lessonId === readerState.lessonId) return;
-    void loadLesson(course, lessonId, readerState.language, {
-      ...readerState,
-      lessonId,
-      sidebarOpen: false,
-      activeSectionId: null,
-    });
+  function navigate(lessonId: string | null) {
+    const url = new URL(window.location.href);
+    if (lessonId) url.searchParams.set("lesson", lessonId);
+    else url.searchParams.delete("lesson");
+    url.hash = "";
+    if (url.href !== window.location.href) window.history.pushState(null, "", url);
+    setRequestedLesson(lessonId);
+    setSidebarOpen(false);
+    window.scrollTo(0, 0);
   }
 
   async function checkForUpdates() {
@@ -179,7 +200,7 @@ export function TextbookApp({
   }
 
   async function applyUpdate(targetVersion: string) {
-    if (!course || !lesson || !updateService || applyingUpdate) return;
+    if (!course || !updateService || applyingUpdate) return;
     setApplyingUpdate(true);
     setUpdateError(null);
     try {
@@ -190,14 +211,7 @@ export function TextbookApp({
         throw new Error("The activated course version does not match the checked update.");
       }
       setCourse(nextCourse);
-      const nextLessonId = nextCourse.lessons.some((item) => item.id === lesson.lessonId)
-        ? lesson.lessonId
-        : nextCourse.lessons[0]?.id;
-      if (!nextLessonId) throw new Error("The updated course does not contain any lessons.");
-      await loadLesson(nextCourse, nextLessonId, readerState.language, {
-        ...readerState,
-        lessonId: nextLessonId,
-      });
+      if (selected && !nextCourse.lessons.some((entry) => entry.id === selected.id)) navigate(null);
       setUpdateResult(null);
     } catch (caught) {
       setUpdateError(
@@ -208,7 +222,7 @@ export function TextbookApp({
     }
   }
 
-  if (!course || !lesson) {
+  if (!course) {
     return (
       <main
         className="connection-state"
@@ -229,47 +243,72 @@ export function TextbookApp({
         course={course}
         language={readerState.language}
         onLanguageChange={changeLanguage}
-        onToggleSidebar={() =>
-          persistState({ ...readerState, sidebarOpen: !readerState.sidebarOpen })
-        }
+        onHome={() => navigate(null)}
+        showSidebarToggle={Boolean(selected)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         onCheckForUpdates={updateService ? checkForUpdates : undefined}
         checkingForUpdates={checkingForUpdates}
       />
-      <div className="textbook-body">
-        <LessonSidebar
+      {!selected ? (
+        <CourseCatalog
           course={course}
-          language={readerState.language}
-          lessonId={lesson.lessonId}
-          open={readerState.sidebarOpen}
-          onClose={() => persistState({ ...readerState, sidebarOpen: false })}
-          onSelectLesson={selectLesson}
+          language={language}
+          resumeLessonId={readerState.lessonId}
+          onSelectLesson={navigate}
         />
-        <aside
-          className="sequence-rail"
-          aria-label={readerState.language === "zh" ? "章节位置" : "Section position"}
-        >
-          <span className="rail-line" aria-hidden="true" />
-          {lesson.sections.map((section, index) => (
-            <a
-              key={section.id}
-              href={`#${section.id}`}
-              title={section.heading}
-              className={index === 0 ? "active" : ""}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>
-            </a>
-          ))}
-        </aside>
-        <div className="reading-canvas">
-          {error ? <div className="inline-error" role="alert">{error}</div> : null}
-          <LessonReader
-            lesson={lesson}
-            language={readerState.language}
-            contentProvider={contentProvider}
+      ) : (
+        <div className="textbook-body">
+          <LessonSidebar
+            course={course}
+            language={language}
+            lessonId={selected.id}
+            open={sidebarOpen}
+            onClose={closeSidebar}
+            onSelectLesson={navigate}
           />
-          <DatasetPanel datasets={datasets} language={readerState.language} />
+          {sidebarOpen && (
+            <button type="button" className="drawer-backdrop" tabIndex={-1}
+              aria-label={zh ? "关闭课程目录" : "Close course contents"} onClick={closeSidebar} />
+          )}
+          <div className="reading-canvas">
+            <div className="reader-tools">
+              <nav className="reader-trail" aria-label={zh ? "当前位置" : "Breadcrumb"}>
+                <a href={window.location.pathname} onClick={(event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  navigate(null);
+                }}>{zh ? "课程目录" : "Course catalog"}</a>
+                <span aria-hidden="true">/</span>
+                <span>{zh ? "第 " : "Lesson "}{selected.number ?? selected.order}{zh ? " 节" : ""}</span>
+              </nav>
+              {headings.length > 0 && (
+                <details className="section-menu" key={selected.id + language}>
+                  <summary>{zh ? "本课小节" : "On this page"}</summary>
+                  <ul>
+                    {headings.map((section) => (
+                      <li key={section.id}>
+                        <a href={`#${section.id}`} onClick={(event) => {
+                          event.currentTarget.closest("details")?.removeAttribute("open");
+                        }}>{section.heading}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </div>
+            {error ? <p className="inline-error" role="alert">{error}</p>
+              : currentLesson ? (
+                <>
+                  <LessonReader lesson={currentLesson} language={language} contentProvider={contentProvider} />
+                  <DatasetPanel datasets={datasets} language={language} />
+                </>
+              ) : <p className="lesson-loading" role="status">{zh ? "正在读取课程…" : "Opening lesson…"}</p>}
+          </div>
         </div>
-      </div>
+      )}
       {updateResult ? (
         <UpdateDialog
           language={readerState.language}

@@ -26,7 +26,7 @@ export interface LessonPayload {
   translationAvailable: boolean;
   title: string;
   markdown: string;
-  sections: Array<{ id: string; heading: string }>;
+  sections: Array<{ id: string; heading: string; line?: number; level?: number }>;
 }
 
 export interface DatasetEntry {

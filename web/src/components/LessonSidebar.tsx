@@ -34,11 +34,12 @@ export function LessonSidebar({
 
   return (
     <aside
+      id="lesson-sidebar"
       className={`lesson-sidebar${open ? " open" : ""}`}
       aria-label={isChinese ? "课程目录" : "Course contents"}
     >
       <div className="sidebar-heading">
-        <h2>{isChinese ? "目录" : "Contents"}</h2>
+        <h2>{isChinese ? "课程目录" : "Course contents"}</h2>
         <button
           type="button"
           className="icon-button sidebar-close"
@@ -59,11 +60,8 @@ export function LessonSidebar({
                 aria-controls="foundation-module-lessons"
                 onClick={() => setFoundationOpen((open) => !open)}
               >
-                <span className="lesson-module-number" aria-hidden="true">0</span>
                 <span className="lesson-module-title">{foundationTitle}</span>
-                <span className="lesson-module-action" aria-hidden="true">
-                  {foundationOpen ? "−" : "+"}
-                </span>
+                <span className="lesson-module-action" aria-hidden="true" />
               </button>
               <ol
                 id="foundation-module-lessons"

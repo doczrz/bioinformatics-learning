@@ -1,0 +1,198 @@
+.lesson-reader,
+.dataset-panel {
+  width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.lesson-reader {
+  padding: clamp(22px, 4.3vw, 60px);
+  font: 400 1.0625rem/1.85 var(--font-body);
+  overflow-wrap: break-word;
+}
+.lesson-reader > * { max-width: 49rem; margin-inline: auto; }
+.lesson-reader :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-body);
+  color: var(--ink);
+  text-wrap: pretty;
+  scroll-margin-top: 6rem;
+}
+.lesson-reader > h1 {
+  margin-block: 0 1.6rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: clamp(1.75rem, 3vw, 2.65rem);
+  line-height: 1.24;
+  letter-spacing: -.034em;
+  font-weight: 700;
+}
+.lesson-reader > h2 {
+  margin-block: 2.7rem 1rem;
+  font-size: clamp(1.32rem, 2.2vw, 1.65rem);
+  letter-spacing: -.024em;
+  line-height: 1.4;
+}
+.lesson-reader > h3 {
+  margin-block: 2rem .65rem;
+  font-size: 1.16rem;
+  line-height: 1.45;
+}
+.lesson-reader > :is(p, ul, ol) { margin-block: 1rem; }
+.lesson-reader > :is(h1, h2, h3) + * { margin-top: 0; }
+.lesson-reader > :last-child { margin-bottom: 0; }
+.lesson-reader :is(ul, ol) { padding-inline-start: 1.55em; }
+.lesson-reader li + li { margin-top: .32rem; }
+.lesson-reader li::marker { color: var(--cobalt); }
+.lesson-reader a { color: var(--cobalt); text-underline-offset: .18em; overflow-wrap: anywhere; }
+.lesson-reader blockquote {
+  border-inline-start: 3px solid var(--cobalt);
+  padding: .8rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  background: var(--paper-deep);
+}
+.lesson-reader blockquote > :first-child { margin-top: 0; }
+.lesson-reader blockquote > :last-child { margin-bottom: 0; }
+.lesson-reader hr { margin-block: 2rem; border: 0; border-top: 1px solid var(--rule); }
+.lesson-reader img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.75rem auto .75rem;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+.lesson-reader p:has(> img:only-child) + p:has(> em:only-child) {
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+.lesson-reader .inline-code {
+  padding: .1em .28em;
+  border-radius: 4px;
+  color: var(--cobalt);
+  background: var(--paper-deep);
+  font: .91em/1.4 var(--font-mono);
+  overflow-wrap: anywhere;
+}
+.lesson-table-wrap {
+  margin-block: 1.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+}
+.lesson-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+  line-height: 1.65;
+}
+.lesson-table-wrap :is(th, td) {
+  padding: .68rem .9rem;
+  text-align: start;
+  vertical-align: top;
+  min-width: 6.5em;
+}
+.lesson-table-wrap th { background: var(--paper-deep); font-weight: 650; }
+.lesson-table-wrap tr + tr, .lesson-table-wrap tbody { border-top: 1px solid var(--rule); }
+.code-block {
+  margin-block: 1.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+.code-toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  padding: 5px 9px 5px 16px;
+  background: var(--paper-raised);
+  border-bottom: 1px solid var(--rule);
+}
+.code-toolbar > span { color: var(--ink-soft); font: 600 .8125rem/1.4 var(--font-mono); }
+.code-toolbar button, .dataset-link {
+  padding: .3rem .65rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--paper-raised);
+  color: var(--cobalt);
+  font: 600 .85rem/1.4 var(--font-body);
+  cursor: pointer;
+}
+.code-toolbar button:hover, .dataset-link:hover { border-color: var(--cobalt); background: var(--selection); }
+.code-block pre {
+  margin: 0;
+  padding: clamp(14px, 2vw, 22px);
+  overflow-x: auto;
+  color: var(--ink);
+  font: .91rem/1.65 var(--font-mono);
+  tab-size: 4;
+}
+.code-block pre code { font: inherit; }
+.translation-missing p { color: var(--ink-soft); }
+
+.sidebar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  margin: 0 0 .55rem;
+  padding: .35rem .5rem .9rem;
+  border-bottom: 1px solid var(--rule);
+}
+.sidebar-heading h2 { margin: 0; font: 650 1.06rem/1.45 var(--font-body); }
+.lesson-sidebar nav { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.lesson-sidebar ol { margin: 0; padding: 0; list-style: none; }
+.lesson-sidebar [hidden] { display: none; }
+.lesson-sidebar nav button {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  width: 100%;
+  min-height: 42px;
+  margin-block: 2px;
+  padding: .65rem .5rem;
+  text-align: start;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ink);
+  font: 400 .9rem/1.52 var(--font-body);
+  cursor: pointer;
+}
+.lesson-sidebar nav button:hover { background: var(--paper-deep); }
+.lesson-sidebar nav button.current { background: var(--selection); color: var(--cobalt); font-weight: 630; }
+.lesson-sidebar nav button:focus-visible { outline-offset: -2px; }
+.lesson-number { flex: 0 0 3ch; color: var(--ink-soft); font: 600 .82rem/1.45 var(--font-mono); }
+.current .lesson-number { color: inherit; }
+.lesson-module { padding-bottom: .45rem; margin-bottom: .45rem; border-bottom: 1px solid var(--rule); }
+.lesson-sidebar .lesson-module-toggle { align-items: center; justify-content: space-between; font-size: .84rem; font-weight: 650; }
+.lesson-module-action {
+  flex: 0 0 7px;
+  width: 7px; height: 7px;
+  margin-right: 4px;
+  border: solid var(--ink-soft);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(-45deg);
+}
+.lesson-module-toggle[aria-expanded="true"] .lesson-module-action { transform: rotate(45deg); }
+
+.dataset-panel { margin-top: 1rem; padding: clamp(18px, 3vw, 32px); }
+.dataset-panel h2 { margin: 0 0 .8rem; font-size: 1.2rem; }
+.dataset-list article { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem 1rem; padding: .8rem 0; border-top: 1px solid var(--rule); }
+.dataset-list dl { display: flex; flex-wrap: wrap; gap: .25em .6em; margin: 0; color: var(--ink-soft); font-size: .875rem; }
+.dataset-list dd { margin: 0; }
+.dataset-link { margin-inline-start: auto; text-decoration: none; }
+@media (max-width: 600px) {
+  .lesson-reader { padding: 1.15rem; font-size: 1rem; }
+  .lesson-reader h1 { font-size: 1.65rem; line-height: 1.35; letter-spacing: -.022em; }
+  .lesson-table-wrap :is(th, td) { padding: .58rem .68rem; }
+  .dataset-list article { flex-direction: column; align-items: start; }
+  .dataset-link { margin-inline-start: 0; }
+}

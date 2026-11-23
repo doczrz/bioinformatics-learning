@@ -18,16 +18,12 @@ export function DatasetPanel({ datasets, language }: DatasetPanelProps) {
 
   return (
     <section className="dataset-panel" aria-labelledby="dataset-heading">
-      <div>
-        <span className="section-eyebrow">DATA</span>
-        <h2 id="dataset-heading">{isChinese ? "外部数据" : "External data"}</h2>
-      </div>
+      <h2 id="dataset-heading">{isChinese ? "外部数据" : "External data"}</h2>
       <div className="dataset-list">
         {datasets.map((dataset) => (
           <article key={dataset.id}>
             <div>
               <strong>{dataset.title[language]}</strong>
-              <code>{dataset.id}</code>
             </div>
             <dl>
               {dataset.license ? (
