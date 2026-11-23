@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.6.1",
-  "revision": 8,
+  "contentVersion": "0.7.0",
+  "revision": 9,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",
@@ -52,6 +52,15 @@
       "title": {
         "zh": "单细胞 RNA 测序：历史、原理与平台",
         "en": "Single-cell RNA sequencing: history, principles, and platforms"
+      }
+    },
+    {
+      "id": "10x-install-and-batch-count",
+      "order": 6,
+      "number": "1.2",
+      "title": {
+        "zh": "10X下的cellranger和spaceranger的安装",
+        "en": "Installing Cell Ranger and Space Ranger from 10x Genomics"
       }
     }
   ],
