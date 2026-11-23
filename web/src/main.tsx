@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
+import { contentVersion } from "../public/content/dev/course.json";
 import { TextbookApp } from "./App";
 import { CachedContentProvider } from "./content/cached-content-provider";
 import { StaticContentProvider } from "./content/static-content-provider";
@@ -17,15 +18,18 @@ if (!root) {
 
 const reactRoot = createRoot(root);
 
-async function start() {
+async function createReaderServices() {
+  const contentRoot = new URL("content/dev/", document.baseURI);
+  if (import.meta.env.MODE === "pages") {
+    return { contentProvider: new StaticContentProvider(contentRoot, undefined, contentVersion) };
+  }
+
   const configResponse = await fetch(new URL("content/site-config.json", document.baseURI));
   if (!configResponse.ok) {
     throw new Error(`Site configuration request failed (${configResponse.status}).`);
   }
   const siteConfig = siteConfigSchema.parse(await configResponse.json());
-  const fallbackProvider = new StaticContentProvider(
-    new URL("content/dev/", document.baseURI),
-  );
+  const fallbackProvider = new StaticContentProvider(contentRoot);
   const cache = new IndexedDbContentCache();
   const contentProvider = new CachedContentProvider(fallbackProvider, cache);
   await contentProvider.refresh();
@@ -36,13 +40,16 @@ async function start() {
     courseId: course.courseId,
     cache,
   });
+  return { contentProvider, updateService };
+}
 
+async function start() {
+  const services = await createReaderServices();
   reactRoot.render(
     <StrictMode>
       <TextbookApp
-        contentProvider={contentProvider}
+        {...services}
         stateStore={new BrowserStateStore()}
-        updateService={updateService}
       />
     </StrictMode>,
   );

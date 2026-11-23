@@ -1,0 +1,76 @@
+name: Publish textbook to GitHub Pages
+
+on:
+  push:
+    tags: ['content-v*']
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: (github.event_name == 'push' && !github.event.deleted) || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify published course and tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          content=web/public/content
+          version=$(jq -er '.contentVersion' "$content/dev/course.json")
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          tag="content-v$version"
+          jq -e --arg version "$version" --arg tag "$tag" \
+            '.contentVersion == $version and .releaseTag == $tag' "$content/release-manifest.json" >/dev/null
+          if [[ "$GITHUB_EVENT_NAME" == push ]]; then
+            [[ "$GITHUB_REF" == "refs/tags/$tag" ]]
+          fi
+          git merge-base --is-ancestor HEAD origin/master
+          git merge-base --is-ancestor "refs/tags/$tag" HEAD
+          git diff --exit-code "refs/tags/$tag" HEAD -- "$content/dev" "$content/release-manifest.json"
+          content_commit=$(jq -er '.commitSha' "$content/release-manifest.json")
+          [[ "$content_commit" =~ ^[[:xdigit:]]{40}$ ]]
+          git merge-base --is-ancestor "$content_commit" HEAD
+          git diff --exit-code "$content_commit" HEAD -- "$content/dev"
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Build hosted reader
+        working-directory: web
+        run: |
+          corepack enable pnpm
+          pnpm install --frozen-lockfile
+          pnpm typecheck
+          pnpm exec vite build --mode pages
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - name: Deploy to Pages
+        id: publish
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

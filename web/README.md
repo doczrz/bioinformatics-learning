@@ -1,6 +1,6 @@
 # Biolearning bilingual textbook web app
 
-This directory is the standalone, hosted-ready textbook reader. It does not require a ChatGPT or Codex host to render.
+[Open the bilingual textbook](https://doczrz.github.io/bioinformatics-learning/). The GitHub Pages edition loads the lessons and figures published with the website. Refresh the page after a release to get the new edition. The local reader also supports downloading verified lesson updates.
 
 ## Local preview
 
@@ -11,10 +11,10 @@ pnpm --dir web install
 pnpm --dir web dev
 ```
 
-Open the local URL printed by Vite. Build the deployable static files with:
+Open the local URL printed by Vite. To preview the GitHub Pages edition with the bundled course:
 
 ```powershell
-pnpm --dir web build
+pnpm --dir web run build:pages
 pnpm --dir web preview
 ```
 
@@ -22,7 +22,7 @@ The production artifact is `web/dist/`. Publish that directory through HTTPS. Co
 
 ## Course content updates
 
-`public/content/site-config.json` contains the UI version and `contentManifestUrl`. The current URL points to the stable release manifest in this public repository. Bundled content remains readable when GitHub is unavailable.
+The local reader uses `public/content/site-config.json` for its UI version and `contentManifestUrl`. The current URL points to the stable release manifest in this public repository. Bundled content remains readable when GitHub is unavailable.
 
 A configured manifest must be publicly readable over HTTPS from GitHub. Its content assets must use immutable release-tag or commit URLs, include byte sizes and SHA-256 hashes, and provide paired Chinese and English lesson files. The browser never contains a GitHub token. A learner explicitly confirms an update before any content assets are downloaded; the previous verified IndexedDB release remains active if verification fails.
 
@@ -36,7 +36,7 @@ The current project uses this public repository as its content source. Publishin
    node web/scripts/generate-content-manifest.mjs <content-commit-sha> "中文更新摘要" "English release summary"
    ```
 
-4. Inspect `public/content/release-manifest.json`, commit it, and push both commits. The stable manifest follows `master`, while every asset URL inside it remains pinned to the earlier content commit SHA.
+4. Inspect `public/content/release-manifest.json`, commit it and tag that commit `content-v<version>`. Push both commits and the tag once approved. The stable manifest follows `master`, while every asset URL inside it remains pinned to the earlier content commit SHA. Pushing the release tag triggers publication of the website.
 
 Every published course version must be greater than the previous version. Do not run the legacy root `course-manifest.yml` release flow for current Web content; it is not yet synchronized with `public/content/dev`.
 

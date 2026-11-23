@@ -4,21 +4,23 @@
 
 [中文](README.md) | [English](README.en.md)
 
+**[Read the textbook online](https://doczrz.github.io/bioinformatics-learning/)**. Open a lesson in your browser. Refresh the page after a new release to read the latest edition.
+
 Bioinformatics Interactive Learning aims to turn a bioinformatics course into an open project that can be continuously updated, freely accessed, and studied at each learner's own pace. It is not a collection of slides to watch passively. It is an interactive textbook that supports browser-based reading, whole-page language switching, code copying, and links to original data sources.
 
 ## Project status
 
-This project is still at an early stage. The standalone bilingual textbook reader can already run locally, while the bundled content currently focuses on validating the reading and update workflows. The complete course is being written progressively.
+The published lessons cover computing foundations in Linux, R and Python and introduce single-cell RNA sequencing. Further chapters are in development.
 
 During active development, I will aim to publish tutorial updates approximately every two to five days. The actual pace may vary with content review, experimental validation, and development work. The curriculum roadmap describes the intended scope; it does not mean that every chapter is already available.
 
 Current boundaries:
 
 - Whole-page Chinese/English switching, lesson navigation, Markdown, code blocks, images, and external data links are supported.
-- The online course-content repository has not yet been configured, so “Check for updates” reports that status explicitly.
+- When running the reader locally, use “Check for updates” to get newly released course content.
 - Reading the textbook does not require ChatGPT or a Codex plugin; the webpage itself does not execute R, Python, or SSH commands.
 
-## Quick start
+## Optional local setup
 
 The steps below use Windows 10/11 and are written for readers who have never used a command line. Enter each command separately in Command Prompt and press `Enter`. If a tool is already installed, you can skip its installation step.
 
@@ -132,7 +134,7 @@ If `git pull` prints `Already up to date.`, the local copy is already current. R
 - Use the sidebar to move between lessons.
 - Read Markdown content, figures, and code examples, and copy code when needed.
 - Follow textbook links to the original sources of external datasets.
-- Use “Check for updates” to look for newly verified course content.
+- Refresh the online reader after a release. In the local reader, select “Check for updates” and confirm to download new course content.
 
 The textbook does not automatically download datasets, run analysis commands, or upload selected text. When you have an analysis question, you can quote the relevant lesson, code, and error message when asking GPT or another AI assistant.
 

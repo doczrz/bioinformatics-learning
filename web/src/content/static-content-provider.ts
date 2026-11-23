@@ -34,13 +34,20 @@ export class StaticContentProvider implements ContentProvider {
   constructor(
     baseUrl: string | URL,
     fetcher: Fetcher = (input, init) => globalThis.fetch(input, init),
+    private readonly assetVersion?: string,
   ) {
     this.root = new URL("./", baseUrl);
     this.fetcher = fetcher;
   }
 
+  private assetUrl(path: string): URL {
+    const url = new URL(path, this.root);
+    if (this.assetVersion) url.searchParams.set("v", this.assetVersion);
+    return url;
+  }
+
   private async readCourseFile(): Promise<CourseFile> {
-    const response = await this.fetcher(new URL("course.json", this.root));
+    const response = await this.fetcher(this.assetUrl("course.json"));
     if (!response.ok) {
       throw new Error(`Course index request failed (${response.status}).`);
     }
@@ -72,7 +79,7 @@ export class StaticContentProvider implements ContentProvider {
     if (!summary) throw new Error(`Unknown lesson ID: ${lessonId}`);
 
     const response = await this.fetcher(
-      new URL(`lessons/${lessonId}.${language}.md`, this.root),
+      this.assetUrl(`lessons/${lessonId}.${language}.md`),
     );
     if (response.status === 404) {
       return {
@@ -109,7 +116,7 @@ export class StaticContentProvider implements ContentProvider {
   }
 
   resolveAssetUrl(path: string): string {
-    return new URL(safeAssetPath(path), this.root).href;
+    return this.assetUrl(safeAssetPath(path)).href;
   }
 
   async refresh(): Promise<void> {}

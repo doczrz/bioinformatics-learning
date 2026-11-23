@@ -9,6 +9,7 @@
   "packageManager": "pnpm@10.24.0",
   "scripts": {
     "build": "vite build && tsc --noEmit",
+    "build:pages": "vite build --mode pages && tsc --noEmit",
     "dev": "vite",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"

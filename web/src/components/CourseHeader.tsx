@@ -5,7 +5,7 @@ interface CourseHeaderProps {
   language: Language;
   onLanguageChange: (language: Language) => void;
   onToggleSidebar: () => void;
-  onCheckForUpdates: () => void;
+  onCheckForUpdates?: () => void;
   checkingForUpdates: boolean;
 }
 
@@ -52,16 +52,18 @@ export function CourseHeader({
             English
           </button>
         </div>
-        <button
-          className="update-button"
-          type="button"
-          disabled={checkingForUpdates}
-          onClick={onCheckForUpdates}
-        >
-          {checkingForUpdates
-            ? isChinese ? "正在检查…" : "Checking…"
-            : isChinese ? "检查更新" : "Check for updates"}
-        </button>
+        {onCheckForUpdates && (
+          <button
+            className="update-button"
+            type="button"
+            disabled={checkingForUpdates}
+            onClick={onCheckForUpdates}
+          >
+            {checkingForUpdates
+              ? isChinese ? "正在检查…" : "Checking…"
+              : isChinese ? "检查更新" : "Check for updates"}
+          </button>
+        )}
       </div>
     </header>
   );

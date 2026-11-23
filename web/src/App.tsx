@@ -158,17 +158,11 @@ export function TextbookApp({
   }
 
   async function checkForUpdates() {
-    if (!course || checkingForUpdates) return;
+    if (!course || !updateService || checkingForUpdates) return;
     setCheckingForUpdates(true);
     setUpdateError(null);
     try {
-      const result = updateService
-        ? await updateService.check(course.contentVersion)
-        : {
-            configured: false,
-            updateAvailable: false,
-            currentVersion: course.contentVersion,
-          };
+      const result = await updateService.check(course.contentVersion);
       setUpdateResult(result);
     } catch (caught) {
       setUpdateResult({
@@ -238,7 +232,7 @@ export function TextbookApp({
         onToggleSidebar={() =>
           persistState({ ...readerState, sidebarOpen: !readerState.sidebarOpen })
         }
-        onCheckForUpdates={() => void checkForUpdates()}
+        onCheckForUpdates={updateService ? checkForUpdates : undefined}
         checkingForUpdates={checkingForUpdates}
       />
       <div className="textbook-body">

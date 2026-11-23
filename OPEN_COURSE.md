@@ -1,6 +1,10 @@
 # 打开双语交互教材 / Open the bilingual textbook
 
-教材现在是独立的全屏浏览器页面。首次本地预览：
+[在线阅读教材 / Read the textbook online](https://doczrz.github.io/bioinformatics-learning/)
+
+用浏览器打开上面的链接，选择左侧章节即可开始。新版本发布后，刷新网页即可。Open the link in your browser and choose a lesson from the sidebar. Refresh the page after a release to get the new edition.
+
+## 可选：本地预览 / Optional local preview
 
 ```powershell
 pnpm --dir web install
@@ -20,6 +24,8 @@ The textbook is now a standalone full-viewport browser page. Open the local URL 
 
 The page supports whole-page language switching, lesson navigation, code copying, and authoritative external dataset links. An installed Chrome AI sidebar can be used independently for questions; the textbook does not send selected text itself.
 
-在线内容仓库尚未配置时，页面继续使用内置占位内容，并明确显示“尚未配置在线内容仓库”。教材页面不提供本地 R、本地 Python 或 SSH/HPC 执行入口，也不执行代码或连接服务器。
+在本地版，使用“检查更新”下载已发布的新教材。代码示例可以复制到你自己的分析环境中运行。
+
+In the local reader, use “Check for updates” to download newly released lessons. Copy examples to your own analysis environment to run them.
 
 See `web/README.md` for hosting, public GitHub content-release, cache, and webpage execution boundaries.
