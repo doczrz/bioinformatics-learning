@@ -6,7 +6,10 @@
   width: min(calc(100% - clamp(40px, 8vw, 144px)), 1320px);
   margin-inline: auto;
 }
-.course-catalog { padding-block: 28px 32px; }
+.course-catalog {
+  flex: 1 0 auto;
+  padding-block: 28px 52px;
+}
 
 .catalog-overview {
   position: relative;
@@ -190,7 +193,6 @@
 .catalog-card-title { font-size: 1.04rem; font-weight: 620; line-height: 1.5; overflow-wrap: anywhere; }
 
 .catalog-publisher {
-  flex: 1 0 auto;
   background: #fff;
   border-top: 1px solid #e2e5ef;
   color-scheme: light;
@@ -204,7 +206,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px 32px;
-  padding-block: 20px 54px;
+  padding-block: 10px 32px;
 }
 .catalog-publisher-credit { display: grid; justify-items: start; gap: 3px; }
 .catalog-publisher-credit span { font-size: .85rem; color: var(--ink-soft); }
@@ -227,8 +229,8 @@
 
 @media (max-width: 760px) {
   .course-catalog, .catalog-publisher-inner { width: calc(100% - 36px); }
-  .course-catalog { padding-top: 18px; }
-  .catalog-publisher-inner { padding-bottom: 32px; }
+  .course-catalog { padding-block: 18px 40px; }
+  .catalog-publisher-inner { padding-block: 12px 24px; }
   .catalog-overview { align-items: flex-start; flex-direction: column; gap: 21px; padding: 24px; }
   .catalog-metrics div { flex-direction: row-reverse; align-items: baseline; gap: 7px; }
   .catalog-metrics dd { font-size: 1.4rem; }

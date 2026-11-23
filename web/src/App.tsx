@@ -105,6 +105,9 @@ export function TextbookApp({
 
   useEffect(() => {
     document.documentElement.lang = readerState.language;
+    document.title = readerState.language === "zh"
+      ? "Biolearning · 双语交互教材"
+      : "Biolearning · Bilingual interactive textbook";
   }, [readerState.language]);
 
   useEffect(() => {

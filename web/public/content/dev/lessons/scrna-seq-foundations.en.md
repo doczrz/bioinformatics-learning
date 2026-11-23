@@ -131,9 +131,9 @@ The cell suspension, reaction mixture, Gel Beads carrying barcoded primers, and 
 
 A GEM can be understood as a tiny water droplet dispersed in oil: a water-in-oil structure. An ideal productive GEM contains one cell and one gel bead. In practice, there are also empty GEMs and a small number of GEMs containing two or more cells.
 
-![Diagram of the GEM workflow for 10x Chromium single-cell RNA sequencing](figures/scrna-seq-gem-workflow.en.png)
+![Six steps in 10x Chromium single-cell RNA sequencing, from tissue to a gene-by-cell expression matrix](figures/scrna-seq-gem-workflow.en.svg)
 
-*Figure 1 | A conceptual workflow centered on 10x Chromium 3′ Gene Expression. This project-original, AI-assisted diagram was created with the OpenAI image generation tool on July 16, 2026. It does not use or copy third-party images, vendor logos, or proprietary layouts. The diagram shows principles only; actual reagent structures and procedures should be checked against the official manual for the relevant product version. Scientific basis: the [10x Genomics 3′ Gene Expression workflow](https://www.10xgenomics.com/support/universal-three-prime-gene-expression/documentation/steps/experimental-design-and-planning/getting-started-single-cell-3-gene-expression) and the [original paper by Zheng and colleagues](https://doi.org/10.1038/ncomms14049).*
+*Figure 1 | Six steps in the 10x Chromium 3′ Gene Expression workflow. Original, AI-assisted project artwork; layout revised November 23, 2026. Read steps 1–3 across the top row, then 4–6 across the bottom. Objects are not to scale. For reagent structures and procedures, see the official manual for the relevant product version. Sources: the [10x Genomics 3′ Gene Expression workflow](https://www.10xgenomics.com/support/universal-three-prime-gene-expression/documentation/steps/experimental-design-and-planning/getting-started-single-cell-3-gene-expression) and the [original paper by Zheng and colleagues](https://doi.org/10.1038/ncomms14049).*
 
 ### Step 4: Lyse the Cell and Add Labels Inside the GEM
 

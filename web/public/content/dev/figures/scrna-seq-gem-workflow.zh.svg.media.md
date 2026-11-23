@@ -1,0 +1,18 @@
+# 第 1.1 节 · 液滴式单细胞 RNA 测序流程
+
+- 发布文件：[中文版 SVG](./scrna-seq-gem-workflow.zh.svg)，1320 × 858。SHA-256：`BC51F1F959C5BDBE796BF4332B22B9732889A2AF8715CA826B5A5857995B3FB1`。
+- 作者与许可：Bioinformatics Interactive Learning 项目，[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。无第三方美术素材、厂商标志或水印。
+- 来源：项目于 2026-07-16 制作并修订的[中文原图](./scrna-seq-gem-workflow.zh.png)，SHA-256：`4DFBD054BC8689169FD699B1E28BF2154A8E6FD0030D6E58D7AF2AE2BC872EB7`。[原图记录](./scrna-seq-gem-workflow.zh.media.md)保留了原始提示词、工具和第六步的修订记录。
+- 修订（2026-11-23）：以中文原图为输入，用 OpenAI 图像编辑工具生成一张包含四组插画的素材图（SHA-256：`77471FE1816F9CF66FA97DF4B71CFE7D236F379192A3267A77265E6794C171DB`）。以 Node.js 将素材等比嵌入 SVG，并用项目原创矢量重排六步流程、编号、文字、箭头和图例。步骤 1 放大框与步骤 4 水滴保持正圆；不同生物对象之间不按实际大小绘制。
+- 保留空滴、双细胞例外，以及第六步“测序读段 / FASTQ → 软件处理 → 表达矩阵”的顺序。屏幕上的读段、UMI 和矩阵计数均为教学示例，不是实验数据。[英文版记录](./scrna-seq-gem-workflow.en.svg.media.md)说明同一图稿的本地化。
+
+## 科学依据
+
+- [10x Genomics：Getting Started: Single Cell 3′ Gene Expression](https://www.10xgenomics.com/support/universal-three-prime-gene-expression/documentation/steps/experimental-design-and-planning/getting-started-single-cell-3-gene-expression)：液滴分隔、GEM 与建库的工作流程。
+- [Zheng 等（2017）：Massively parallel digital transcriptional profiling of single cells](https://doi.org/10.1038/ncomms14049)：液滴条形码、分子标记与单细胞表达谱。两项均为科学参考，未使用其图像。
+
+## Final illustration prompt
+
+```text
+Use case: scientific-educational, source-preserving editorial illustration edit. Input image 1 is the Chinese teaching figure being re-laid out for a desktop textbook. Extract/redraw the existing sample and equipment illustrations as a perfectly aligned 2 × 2 icon sheet with FOUR equal square quadrants; entire final sheet SQUARE. We will add all typography, numbered circles, and data diagrams as live vector art later. Render ONLY the four illustration groups. White pure #ffffff background; no panel borders, headings, numbers, badges, lettering, graph axis labels, watermark, shadows crossing quadrants, arrows, divider or lines between quadrants. Nothing at all along the vertical and horizontal center gutters. Use soft semi-isometric medical textbook linework matching original; muted warm coral, cool slate, periwinkle and pale blue, no logos. All four groups have 10–15% free margin within their square, make them easy to place in a textbook. TOP LEFT ONLY: one coral tissue fragment next to one upright capped conical tube containing a small scattered variety of suspended cells; graphic grouping about as wide as tall. TOP RIGHT ONLY: seven separate differently colored intact generic mammalian cells viewed head on, natural not longitudinally squeezed, with recognizable nuclei and irregular native outlines, no enclosing circle (we draw the exact circle ourselves); arrange as a compact circular cluster centered inside this quadrant, all cells fully contained with plenty of margin. BOTTOM LEFT ONLY: a nonbranded benchtop cell counter and a small blue hemocytometer counting slide in front, small generic symbolic readouts with no writing or numbers, no unexplained instrument setting; preserve natural physical proportions and front three-quarter perspective. BOTTOM RIGHT ONLY: one nonbranded compact dark-slate desktop sequencing instrument with one small screen with 4 short horizontal blue scan lines only and illuminated thin blue status stripe; appropriate width and height, not tall and stretched; NO charts or clustering plots. Do NOT add microfluidics, labels, connectors, extra tubes or objects not specified. Not a four-step timeline: this is a production asset sheet and each quadrant is isolated. Preserve the original palette and scientific subjects; correct warped aspect ratios, do not squeeze to fit.
+```

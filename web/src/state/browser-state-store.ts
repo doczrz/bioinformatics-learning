@@ -11,7 +11,7 @@ export interface ReaderState {
 export const READER_STATE_KEY = "biolearning.reader-state.v1";
 
 export const defaultReaderState: ReaderState = {
-  language: "zh",
+  language: "en",
   lessonId: null,
   sidebarOpen: false,
   activeSectionId: null,

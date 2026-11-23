@@ -55,10 +55,10 @@ export function CourseHeader({
         <span className="masthead-version">v{course.contentVersion}</span>
         <div className="masthead-actions">
           <div className="masthead-languages" role="group" aria-label={isChinese ? "教材语言" : "Textbook language"}>
-            <button type="button" lang="zh" aria-pressed={isChinese} onClick={() => onLanguageChange("zh")}>中文</button>
             <button type="button" lang="en" aria-label="English" aria-pressed={!isChinese} onClick={() => onLanguageChange("en")}>
               <span className="lang-full">English</span><span className="lang-short">EN</span>
             </button>
+            <button type="button" lang="zh" aria-pressed={isChinese} onClick={() => onLanguageChange("zh")}>中文</button>
           </div>
           <button
             className="masthead-theme"

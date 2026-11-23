@@ -131,9 +131,9 @@ Smart-seq 常把细胞分别放进独立反应孔中。它适合较深入地观�
 
 GEM 可以理解为分散在油中的小水滴，也就是“油包水”结构。一个理想的有效 GEM 中包含一个细胞和一颗凝胶珠；现实中也会出现空 GEM，以及少量装入两个或更多细胞的 GEM。
 
-![10x Chromium 单细胞 RNA 测序的 GEM 工作流程示意图](figures/scrna-seq-gem-workflow.zh.png)
+![10x Chromium 单细胞 RNA 测序的六步流程：从组织样本到基因 × 细胞表达矩阵](figures/scrna-seq-gem-workflow.zh.svg)
 
-*图 1｜以 10x Chromium 3′ Gene Expression 为主的概念流程。项目原创 AI 辅助示意图，2026 年 7 月 16 日使用 OpenAI 图像生成工具制作，未使用或复制第三方图片、厂商 Logo 或专有版式。图中只表达原理，实际试剂结构与操作应以相应产品版本的官方手册为准。科学依据：[10x Genomics 3′ Gene Expression 工作流程](https://www.10xgenomics.com/support/universal-three-prime-gene-expression/documentation/steps/experimental-design-and-planning/getting-started-single-cell-3-gene-expression)与 [Zheng 等人的原始论文](https://doi.org/10.1038/ncomms14049)。*
+*图 1｜10x Chromium 3′ Gene Expression 的六步流程。项目原创 AI 辅助插画，2026 年 11 月 23 日修订排版。上排为第 1–3 步，下排为第 4–6 步。图中对象不代表实际大小；试剂结构与操作请以相应产品版本的官方手册为准。科学依据：[10x Genomics 3′ Gene Expression 工作流程](https://www.10xgenomics.com/support/universal-three-prime-gene-expression/documentation/steps/experimental-design-and-planning/getting-started-single-cell-3-gene-expression)与 [Zheng 等人的原始论文](https://doi.org/10.1038/ncomms14049)。*
 
 ### 第 4 步：在 GEM 内裂解细胞并写入标签
 
