@@ -20,9 +20,9 @@ A common beginner misunderstanding is to treat Linux, R, Python, and Codex as fo
 
 For now, you can understand their relationship like this: Linux provides the computing environment; Bash, R, and Python handle different tasks within that environment; Codex helps the researcher organize, execute, and inspect the work, but it does not replace the researcher's judgment about questions and evidence.
 
-![Hierarchy showing the roles of Linux, Bash, R, Python, Codex, and the researcher in bioinformatics](figures/bioinformatics-computing-layers.en.png)
+![Hierarchy showing the roles of Linux, Bash, R, Python, Codex, and the researcher in bioinformatics](figures/bioinformatics-computing-layers.en.svg)
 
-*Figure 1 | Common roles of bioinformatics computing tools. Linux provides the operating-system environment, Bash connects commands and workflows, R and Python handle analysis tasks, Codex can assist across several steps, and the researcher remains responsible for asking questions, reviewing evidence, and interpreting results. This project-original, AI-assisted diagram was created with the OpenAI image-generation tool on July 23, 2026. It uses no vendor logos, screenshots, or third-party layouts. The diagram shows a common relationship, not the only possible workflow.*
+*Figure 1 | Common roles of bioinformatics computing tools. Linux provides the operating-system environment, Bash connects commands and workflows, R and Python handle analysis tasks, Codex can assist across several steps, and the researcher remains responsible for asking questions, reviewing evidence, and interpreting results. The original diagram was created for this project using the OpenAI image-generation tool on July 23, 2026, then redrawn as a vector graphic with scalable text. It uses no vendor logos, screenshots, or third-party layouts. The diagram shows a common relationship, not the only possible workflow.*
 
 The diagram is a guide rather than a rigid rule. R and Python also run on Windows and macOS, and Linux is not limited to command-line use.
 

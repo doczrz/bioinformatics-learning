@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.6.0",
-  "revision": 7,
+  "contentVersion": "0.6.1",
+  "revision": 8,
   "defaultLanguage": "zh",
   "title": {
     "zh": "双语交互教材",

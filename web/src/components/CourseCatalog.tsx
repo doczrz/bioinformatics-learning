@@ -1,5 +1,6 @@
 import type { MouseEvent } from "react";
 import type { CourseIndex, Language, LessonSummary } from "../contracts";
+import centerLogo from "../assets/vib-ccb.png";
 import "../styles/catalog.css";
 
 interface CourseCatalogProps {
@@ -90,6 +91,16 @@ export function CourseCatalog({ course, language, resumeLessonId, onSelectLesson
           </details>
         );
       })}
+      <footer className="catalog-publisher" aria-label={zh ? "发布方" : "Publisher"}>
+        <div className="catalog-publisher-credit">
+          <span>{zh ? "发布方" : "Published by"}</span>
+          <a href="https://lambrechtslab.sites.vib.be/en" lang="en">Diether Lambrechts Lab</a>
+          <span lang="en">Laboratory of Translational Genetics</span>
+        </div>
+        <a className="catalog-publisher-mark" href="https://ccb.sites.vib.be/en">
+          <img src={centerLogo} width={1059} height={411} alt="VIB–KU Leuven Center for Cancer Biology" />
+        </a>
+      </footer>
     </main>
   );
 }

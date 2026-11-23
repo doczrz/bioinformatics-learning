@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" lang="en" role="img" aria-labelledby="title desc">
+  <title id="title">How Bioinformatics Computing Tools Work Together</title>
+  <desc id="desc">Biological questions and data enter the computing environment. Linux provides the operating system; Bash connects workflows in R and Python. Codex assists across layers; the researcher reviews evidence and interprets results to produce traceable analysis results.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#334664"/></marker>
+    <marker id="assist" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0 0 8 4 0 8Z" fill="#7150ac"/></marker>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif; fill: #192843 }
+    .title { font-size: 31px; font-weight: 700 }
+    .name { font-size: 23px; font-weight: 700 }
+    .short { font-size: 18px; font-weight: 650 }
+    .details { font-size: 16px; fill: #364860 }
+    .box { stroke-width: 1.6 }
+    .flow, .feedback, .help { fill: none; stroke-linejoin: round; stroke-linecap: round; stroke-width: 2.4 }
+    .flow, .feedback { stroke: #334664; marker-end: url(#arrow) }
+    .help { stroke: #7150ac; marker-end: url(#assist) }
+    .feedback, .help { stroke-dasharray: 3 5 }
+    .icon { fill: none; stroke-linejoin: round; stroke-linecap: round; stroke-width: 2.4 }
+  </style>
+  <rect width="1000" height="680" fill="#fff"/>
+  <text x="500" y="48" text-anchor="middle" class="title">How Bioinformatics Computing Tools Work Together</text>
+
+  <!-- Main computing stack: the two parallel language boxes share the same parent. -->
+  <rect x="213" y="75" width="528" height="361" rx="16" fill="#f7f9ff" stroke="#a3b7db" class="box"/>
+  <rect x="227" y="89" width="500" height="79" rx="10" fill="#eef4ff" stroke="#6890ca" class="box"/>
+  <g transform="translate(245 112)" class="icon" stroke="#3567b1">
+    <rect x="0" y="0" width="34" height="23" rx="3"/><path d="M17 23v6m-9 0h18"/>
+    <rect x="39" y="2" width="10" height="27" rx="2"/><path d="M42 8h4m-3 15h2"/>
+  </g>
+  <text x="310" y="121" class="name">Linux Operating System</text>
+  <text x="310" y="148" class="details">Manage files · Run tools · Use compute resources</text>
+  <path d="M477 169v20" class="flow"/>
+  <rect x="227" y="192" width="500" height="79" rx="10" fill="#eef4ff" stroke="#6890ca" class="box"/>
+  <g transform="translate(246 215)" class="icon" stroke="#3567b1">
+    <rect width="42" height="32" rx="5"/><path d="m8 9 7 7-7 7m13-1h11"/>
+  </g>
+  <text x="310" y="224" class="name">Bash Command Line</text>
+  <text x="310" y="251" class="details">Connect commands · Run batches · Save workflows</text>
+
+  <path d="M350 272v21" class="flow"/><path d="M604 272v21" class="flow"/>
+  <rect x="227" y="296" width="244" height="125" rx="10" fill="#eef8f5" stroke="#65a395" class="box"/>
+  <rect x="483" y="296" width="244" height="125" rx="10" fill="#f4effb" stroke="#a08ac6" class="box"/>
+  <g transform="translate(246 316)" class="icon" stroke="#28786c">
+    <path d="M1 29h36M6 25v-7m8 7V14m8 11V9m8 16V3M6 12l8-5 7 1L30 0"/>
+  </g>
+  <g transform="translate(500 315)" class="icon" stroke="#74569e">
+    <rect x="0" y="0" width="41" height="31" rx="5"/><path d="m10 10-5 6 5 5m20-11 5 6-5 5m-8-15-5 19"/>
+  </g>
+  <text x="296" y="341" class="name">R</text>
+  <text x="553" y="341" class="name">Python</text>
+  <text x="245" y="374" class="details"><tspan x="245">Statistics · Bioinformatics</tspan><tspan x="245" dy="23">Visualization</tspan></text>
+  <text x="501" y="374" class="details"><tspan x="501">Data processing · Automation</tspan><tspan x="501" dy="23">Machine learning</tspan></text>
+
+  <!-- Incoming data and the separate, dashed assistant connections. -->
+  <rect x="14" y="173" width="167" height="123" rx="12" fill="#eef8f5" stroke="#65a395" class="box"/>
+  <g transform="translate(81 188)" class="icon" stroke="#28786c">
+    <ellipse cx="16" cy="5" rx="15" ry="5"/><path d="M1 5v17c0 7 30 7 30 0V5M1 13c0 7 30 7 30 0"/>
+  </g>
+  <text x="97" y="234" class="short" text-anchor="middle"><tspan x="97">Biological</tspan><tspan x="97" dy="22">Question</tspan><tspan x="97" dy="22">and Data</tspan></text>
+  <path d="M182 232h27" class="flow"/>
+  <rect x="798" y="165" width="187" height="143" rx="12" fill="#f4effb" stroke="#a08ac6" class="box"/>
+  <g transform="translate(817 186)" class="icon" stroke="#74569e">
+    <path d="M4 1h28a4 4 0 0 1 4 4v17a4 4 0 0 1-4 4h-5l-1 7-8-7H4a4 4 0 0 1-4-4V5a4 4 0 0 1 4-4Z"/>
+    <g fill="#74569e" stroke="none"><circle cx="10" cy="14" r="2"/><circle cx="18" cy="14" r="2"/><circle cx="26" cy="14" r="2"/></g>
+  </g>
+  <text x="866" y="209" class="name">Codex</text>
+  <text x="891" y="252" class="details" text-anchor="middle"><tspan x="891">Helps plan · Write</tspan><tspan x="891" dy="23">Run · Check</tspan></text>
+  <path d="M796 232h-51" class="help"/>
+  <path d="M769 232V128h-24" class="help"/>
+  <path d="M769 232v113h-24" class="help"/>
+  <path d="M769 345v40h-24" class="help"/>
+
+  <!-- Evidence review feeds back to the stack; the final arrow points to the result. -->
+  <path d="M477 437v32" class="flow"/>
+  <rect x="279" y="473" width="396" height="96" rx="12" fill="#fff6e8" stroke="#c59655" class="box"/>
+  <g transform="translate(300 501)" class="icon" stroke="#96652d"><circle cx="16" cy="9" r="8"/><path d="M1 35v-3c0-8 7-13 15-13s15 5 15 13v3Z"/></g>
+  <text x="349" y="502" class="name">Researcher</text>
+  <text x="349" y="530" class="details"><tspan x="349">Ask questions · Review evidence</tspan><tspan x="349" dy="22">Interpret results</tspan></text>
+  <path d="M277 522h-42v-81" class="feedback"/>
+  <path d="M677 522h42v-81" class="feedback"/>
+  <path d="M477 570v31" class="flow"/>
+  <rect x="299" y="605" width="356" height="52" rx="12" fill="#eaf6ef" stroke="#70a789" class="box"/>
+  <g transform="translate(316 617)" class="icon" stroke="#367453"><circle cx="14" cy="14" r="13"/><path d="m7 14 5 5 9-11"/></g>
+  <text x="357" y="638" class="short">Traceable Analysis Results</text>
+</svg>

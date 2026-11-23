@@ -7,6 +7,7 @@ import type { ContentProvider } from "../content/content-provider";
 import { parseSections } from "../content/markdown";
 import type { Language, LessonPayload } from "../contracts";
 import { CodeBlock } from "./CodeBlock";
+import { LessonFigure } from "./LessonFigure";
 import "../styles/reader.css";
 
 interface LessonReaderProps {
@@ -65,6 +66,14 @@ export function LessonReader({
           h4: heading("h4"),
           h5: heading("h5"),
           h6: heading("h6"),
+          p: ({ node, children }) => {
+            const only = node?.children.length === 1 ? node.children[0] : undefined;
+            if (only?.type === "element" && only.tagName === "img" && typeof only.properties.src === "string") {
+              return <LessonFigure src={contentProvider.resolveAssetUrl(only.properties.src)}
+                alt={String(only.properties.alt ?? "")} language={language} />;
+            }
+            return <p>{children}</p>;
+          },
           pre: ({ node, children }) => {
             const code = node?.children[0];
             if (code?.type !== "element" || code.tagName !== "code") return <pre>{children}</pre>;

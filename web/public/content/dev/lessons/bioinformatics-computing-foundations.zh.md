@@ -20,9 +20,9 @@
 
 可以暂时把它们的关系理解为：Linux 提供计算环境；Bash、R 和 Python 在这个环境中承担不同任务；Codex 帮助研究者组织、执行和检查工作，但不替代研究者对问题与证据的判断。
 
-![Linux、Bash、R、Python、Codex 与研究者在生物信息学分析中的分工层级图](figures/bioinformatics-computing-layers.zh.png)
+![Linux、Bash、R、Python、Codex 与研究者在生物信息学分析中的分工层级图](figures/bioinformatics-computing-layers.zh.svg)
 
-*图 1｜生物信息学计算工具的常见分工。Linux 提供操作系统环境，Bash 连接命令和流程，R 与 Python 承担分析任务，Codex 可以协助多个环节，而研究者负责提出问题、审核证据并解释结果。项目原创 AI 辅助示意图，2026 年 7 月 23 日使用 OpenAI 图像生成工具制作；未使用厂商 Logo、截图或第三方版式。图中表达的是常见关系，不是唯一工作方式。*
+*图 1｜生物信息学计算工具的常见分工。Linux 提供操作系统环境，Bash 连接命令和流程，R 与 Python 承担分析任务，Codex 可以协助多个环节，而研究者负责提出问题、审核证据并解释结果。项目原图于 2026 年 7 月 23 日使用 OpenAI 图像生成工具制作，后重绘为文字可缩放的矢量图；未使用厂商 Logo、截图或第三方版式。图中表达的是常见关系，不是唯一工作方式。*
 
 这张图只表示常见分工，不是硬性规定。R 和 Python 也能在 Windows、macOS 上运行；Linux 也不是只能使用命令行。
 

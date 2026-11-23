@@ -185,6 +185,24 @@
 .catalog-lesson-number { color: var(--ink-soft); font-size: .8125rem; font-weight: 550; font-variant-numeric: tabular-nums; }
 .catalog-card-title { font-size: 1.04rem; font-weight: 620; line-height: 1.5; overflow-wrap: anywhere; }
 
+.catalog-publisher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.catalog-publisher-credit { display: grid; justify-items: start; gap: 3px; }
+.catalog-publisher-credit span { font-size: .85rem; color: var(--ink-soft); }
+.catalog-publisher-credit a { color: var(--ink); font-size: 1.05rem; font-weight: 650; text-decoration: none; }
+.catalog-publisher-credit a:hover { color: var(--cobalt); text-decoration: underline; }
+.catalog-publisher-mark { display: block; max-width: 100%; padding: 8px 15px; border-radius: 6px; background: #fff; }
+.catalog-publisher-mark img { display: block; width: 150px; max-width: 100%; height: auto; }
+.catalog-publisher a:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+
 @media (max-width: 760px) {
   .course-catalog { width: calc(100% - 36px); padding-block: 18px 32px; }
   .catalog-overview { align-items: flex-start; flex-direction: column; gap: 21px; padding: 24px; }
