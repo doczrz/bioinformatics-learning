@@ -1,6 +1,8 @@
 import type { MouseEvent } from "react";
 import type { CourseIndex, Language, LessonSummary } from "../contracts";
 import centerLogo from "../assets/vib-ccb.png";
+import vibLogo from "../assets/vib.svg";
+import kuLeuvenLogo from "../assets/ku-leuven.svg";
 import "../styles/catalog.css";
 
 interface CourseCatalogProps {
@@ -40,7 +42,7 @@ export function CourseCatalog({ course, language, resumeLessonId, onSelectLesson
     onSelectLesson(id);
   }
 
-  return (
+  return (<>
     <main className="course-catalog" aria-labelledby="catalog-title">
       <header className="catalog-overview">
         <div className="catalog-intro">
@@ -91,16 +93,26 @@ export function CourseCatalog({ course, language, resumeLessonId, onSelectLesson
           </details>
         );
       })}
-      <footer className="catalog-publisher" aria-label={zh ? "发布方" : "Publisher"}>
+    </main>
+    <footer className="catalog-publisher" aria-label={zh ? "发布方" : "Publisher"}>
+      <div className="catalog-publisher-inner">
         <div className="catalog-publisher-credit">
           <span>{zh ? "发布方" : "Published by"}</span>
           <a href="https://lambrechtslab.sites.vib.be/en" lang="en">Diether Lambrechts Lab</a>
           <span lang="en">Laboratory of Translational Genetics</span>
         </div>
-        <a className="catalog-publisher-mark" href="https://ccb.sites.vib.be/en">
-          <img src={centerLogo} width={1059} height={411} alt="VIB–KU Leuven Center for Cancer Biology" />
-        </a>
-      </footer>
-    </main>
-  );
+        <div className="catalog-publisher-marks">
+          <a className="catalog-center-mark" href="https://ccb.sites.vib.be/en">
+            <img src={centerLogo} width={1059} height={411} alt="VIB–KU Leuven Center for Cancer Biology" />
+          </a>
+          <a href="https://vib.be/en">
+            <img src={vibLogo} width={102} height={55} alt="VIB" />
+          </a>
+          <a href="https://www.kuleuven.be/english/kuleuven/">
+            <img src={kuLeuvenLogo} width={1587} height={567} alt="KU Leuven" />
+          </a>
+        </div>
+      </div>
+    </footer>
+  </>);
 }
