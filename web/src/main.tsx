@@ -3,6 +3,9 @@ import { createRoot } from "react-dom/client";
 
 import { contentVersion } from "../public/content/dev/course.json";
 import { TextbookApp } from "./App";
+import { ReaderError, readerProblem } from "./components/ReaderError";
+import { messages } from "./i18n";
+import { languageInUrl } from "./reader-location";
 import { CachedContentProvider } from "./content/cached-content-provider";
 import { StaticContentProvider } from "./content/static-content-provider";
 import { siteConfigSchema } from "./schemas";
@@ -56,10 +59,19 @@ async function start() {
 }
 
 void start().catch((caught: unknown) => {
-  const message = caught instanceof Error ? caught.message : "The textbook could not be opened.";
+  let language = languageInUrl(window.location.search);
+  if (!language) {
+    try {
+      language = new BrowserStateStore().read().language;
+    } catch {
+      language = "en";
+    }
+  }
+  document.documentElement.lang = language;
+  document.title = `Biolearning · ${messages[language].textbook}`;
   reactRoot.render(
-    <main className="connection-state" role="alert">
-      {message}
+    <main className="connection-state" aria-label={messages[language].textbook}>
+      <ReaderError problem={readerProblem("courseError", caught)} language={language} />
     </main>,
   );
 });

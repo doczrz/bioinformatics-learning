@@ -1,6 +1,6 @@
 # Bioinformatics Interactive Learning
 
-> 面向生物信息学初学者的开源双语交互式教材。
+> 面向生物信息学初学者的开源多语言交互式教材。
 
 [中文](README.md) | [English](README.en.md)
 
@@ -16,7 +16,7 @@ Bioinformatics Interactive Learning 希望把生物信息学课程变成一个�
 
 当前版本的边界：
 
-- 支持中英文整页切换、章节导航、Markdown、代码块、图片和外部数据链接。
+- 支持中文、英语、荷兰语、法语、西班牙语和德语整页切换、章节导航、Markdown、代码块、图片和外部数据链接。
 - 在本地运行阅读器时，可以使用“检查更新”获取已发布的新教材。
 - 阅读教材不需要 ChatGPT 或 Codex 插件；网页本身不执行 R、Python 或 SSH 命令。
 
@@ -195,7 +195,7 @@ pnpm --dir web preview
 
 ```text
 web/                         独立的 Vite/React 教材阅读器
-web/public/content/dev/      当前随网页提供的双语课程内容
+web/public/content/dev/      当前随网页提供的多语言课程内容
 src/codex_textbook/          课程校验与内容发布工具
 datasets/                    数据集目录及来源元数据
 ```

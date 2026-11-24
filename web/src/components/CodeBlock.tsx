@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { Language } from "../contracts";
+import { messages } from "../i18n";
 
 interface CodeBlockProps {
   code: string;
@@ -16,7 +17,7 @@ export function CodeBlock({
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
     "idle",
   );
-  const isChinese = interfaceLanguage === "zh";
+  const t = messages[interfaceLanguage];
 
   async function writeWithClipboardApi() {
     const clipboard = navigator.clipboard;
@@ -70,17 +71,17 @@ export function CodeBlock({
   return (
     <div className="code-block">
       <div className="code-toolbar">
-        <span>{languageLabel || "text"}</span>
+        <span>{!languageLabel || languageLabel === "text" ? t.text : languageLabel}</span>
         <button
           type="button"
           onClick={() => void copyCode()}
-          aria-label={isChinese ? "复制代码" : "Copy code"}
+          aria-label={t.copyCode}
         >
           {copyState === "copied"
-            ? isChinese ? "已复制" : "Copied"
+            ? t.copied
             : copyState === "failed"
-              ? isChinese ? "复制失败" : "Copy failed"
-              : isChinese ? "复制" : "Copy"}
+              ? t.copyFailed
+              : t.copy}
         </button>
       </div>
       <pre>

@@ -1,12 +1,24 @@
 {
   "schemaVersion": 1,
   "courseId": "codex-bilingual-textbook",
-  "contentVersion": "0.7.1",
-  "revision": 10,
+  "contentVersion": "0.8.0",
+  "revision": 11,
   "defaultLanguage": "en",
+  "languages": [
+    "zh",
+    "en",
+    "nl",
+    "fr",
+    "es",
+    "de"
+  ],
   "title": {
-    "zh": "双语交互教材",
-    "en": "Bilingual Interactive Textbook"
+    "zh": "生物信息学交互教材",
+    "en": "Interactive Bioinformatics Textbook",
+    "nl": "Interactief leerboek bio-informatica",
+    "fr": "Manuel interactif de bio-informatique",
+    "es": "Manual interactivo de bioinformática",
+    "de": "Interaktives Lehrbuch der Bioinformatik"
   },
   "lessons": [
     {
@@ -15,7 +27,11 @@
       "number": "0.1",
       "title": {
         "zh": "为什么生物信息学常在 Linux 上运行？R、Python 与 Codex 分别做什么？",
-        "en": "Why does bioinformatics often run on Linux, and what do R, Python, and Codex each do?"
+        "en": "Why does bioinformatics often run on Linux, and what do R, Python, and Codex each do?",
+        "nl": "Waarom wordt Linux zo vaak gebruikt in de bio-informatica? Wat doen R, Python en Codex?",
+        "fr": "Pourquoi utilise-t-on souvent Linux en bio-informatique ? À quoi servent R, Python et Codex ?",
+        "es": "¿Por qué se usa tanto Linux en bioinformática? ¿Para qué sirven R, Python y Codex?",
+        "de": "Warum wird Linux in der Bioinformatik so häufig eingesetzt? Wozu dienen R, Python und Codex?"
       }
     },
     {
@@ -24,7 +40,11 @@
       "number": "0.2",
       "title": {
         "zh": "为什么已经安装了 R 或 Python 仍然跑不动？软件包、环境、依赖与版本",
-        "en": "Why can code still fail after R or Python is installed? Packages, environments, dependencies, and versions"
+        "en": "Why can code still fail after R or Python is installed? Packages, environments, dependencies, and versions",
+        "nl": "Waarom werkt mijn code nog niet na de installatie van R of Python? Pakketten, omgevingen, afhankelijkheden en versies",
+        "fr": "Pourquoi mon code échoue-t-il alors que R ou Python est installé ? Paquets, environnements, dépendances et versions",
+        "es": "¿Por qué falla el código si ya he instalado R o Python? Paquetes, entornos, dependencias y versiones",
+        "de": "Warum läuft mein Code trotz installiertem R oder Python nicht? Pakete, Umgebungen, Abhängigkeiten und Versionen"
       }
     },
     {
@@ -33,7 +53,11 @@
       "number": "0.3",
       "title": {
         "zh": "可以不手写，但必须看得懂：R 基本语法与代码阅读",
-        "en": "You do not have to write it by hand, but you must understand it: R basics and code reading"
+        "en": "You do not have to write it by hand, but you must understand it: R basics and code reading",
+        "nl": "R-code leren lezen en begrijpen: de basissyntaxis",
+        "fr": "Lire et comprendre le code R : les bases de la syntaxe",
+        "es": "Leer y entender código en R: sintaxis básica",
+        "de": "R-Code lesen und verstehen: Grundlagen der Syntax"
       }
     },
     {
@@ -42,7 +66,11 @@
       "number": "0.4",
       "title": {
         "zh": "可以不手写，但必须看得懂：Python 基本语法与代码阅读",
-        "en": "You do not have to write it by hand, but you must understand it: Python basics and code reading"
+        "en": "You do not have to write it by hand, but you must understand it: Python basics and code reading",
+        "nl": "Python-code leren lezen en begrijpen: de basissyntaxis",
+        "fr": "Lire et comprendre le code Python : les bases de la syntaxe",
+        "es": "Leer y entender código en Python: sintaxis básica",
+        "de": "Python-Code lesen und verstehen: Grundlagen der Syntax"
       }
     },
     {
@@ -51,7 +79,11 @@
       "number": "1.1",
       "title": {
         "zh": "单细胞 RNA 测序：历史、原理与平台",
-        "en": "Single-cell RNA sequencing: history, principles, and platforms"
+        "en": "Single-cell RNA sequencing: history, principles, and platforms",
+        "nl": "RNA-sequencing van individuele cellen: geschiedenis, principes en platforms",
+        "fr": "Séquençage de l’ARN en cellule unique : histoire, principes et plateformes",
+        "es": "Secuenciación de ARN de células individuales: historia, principios y plataformas",
+        "de": "Einzelzell-RNA-Sequenzierung: Geschichte, Grundlagen und Plattformen"
       }
     },
     {
@@ -60,7 +92,11 @@
       "number": "1.2",
       "title": {
         "zh": "10X下的cellranger和spaceranger的安装",
-        "en": "Installing Cell Ranger and Space Ranger from 10x Genomics"
+        "en": "Installing Cell Ranger and Space Ranger from 10x Genomics",
+        "nl": "Cell Ranger en Space Ranger van 10x Genomics installeren",
+        "fr": "Installer Cell Ranger et Space Ranger de 10x Genomics",
+        "es": "Instalación de Cell Ranger y Space Ranger de 10x Genomics",
+        "de": "Cell Ranger und Space Ranger von 10x Genomics installieren"
       }
     }
   ],
@@ -69,7 +105,11 @@
       "id": "example-data",
       "title": {
         "zh": "外部示例数据",
-        "en": "External example data"
+        "en": "External example data",
+        "nl": "Externe voorbeeldgegevens",
+        "fr": "Jeu de données d’exemple externe",
+        "es": "Conjunto de datos de ejemplo externo",
+        "de": "Externer Beispieldatensatz"
       },
       "sourceUrl": "https://example.org/dataset",
       "license": "See source"

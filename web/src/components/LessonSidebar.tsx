@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { CourseIndex, Language } from "../contracts";
+import { messages } from "../i18n";
 
 interface LessonSidebarProps {
   course: CourseIndex;
@@ -19,11 +20,9 @@ export function LessonSidebar({
   onSelectLesson,
   onClose,
 }: LessonSidebarProps) {
-  const isChinese = language === "zh";
+  const t = messages[language];
   const [foundationOpen, setFoundationOpen] = useState(true);
-  const foundationTitle = isChinese
-    ? "学习单细胞前的基础知识"
-    : "Foundations before single-cell analysis";
+  const foundationTitle = t.foundations;
   const lessonEntries = course.lessons.map((lesson, index) => ({ lesson, index }));
   const foundationLessons = lessonEntries.filter(({ lesson }) =>
     lesson.number?.startsWith("0."),
@@ -36,15 +35,15 @@ export function LessonSidebar({
     <aside
       id="lesson-sidebar"
       className={`lesson-sidebar${open ? " open" : ""}`}
-      aria-label={isChinese ? "课程目录" : "Course contents"}
+      aria-label={t.contents}
     >
       <div className="sidebar-heading">
-        <h2>{isChinese ? "课程目录" : "Course contents"}</h2>
+        <h2>{t.contents}</h2>
         <button
           type="button"
           className="icon-button sidebar-close"
           onClick={onClose}
-          aria-label={isChinese ? "关闭目录" : "Close contents"}
+          aria-label={t.closeContents}
         >
           ×
         </button>
@@ -79,7 +78,7 @@ export function LessonSidebar({
                       <span className="lesson-number">
                         {lesson.number ?? String(index + 1).padStart(2, "0")}
                       </span>
-                      <span>{lesson.title[language]}</span>
+                      <span>{lesson.title[language] ?? lesson.title.en}</span>
                     </button>
                   </li>
                 ))}
@@ -97,7 +96,7 @@ export function LessonSidebar({
                 <span className="lesson-number">
                   {lesson.number ?? String(index + 1).padStart(2, "0")}
                 </span>
-                <span>{lesson.title[language]}</span>
+                <span>{lesson.title[language] ?? lesson.title.en}</span>
               </button>
             </li>
           ))}

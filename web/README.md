@@ -1,6 +1,6 @@
-# Biolearning bilingual textbook web app
+# Biolearning multilingual textbook web app
 
-[Open the bilingual textbook](https://doczrz.github.io/bioinformatics-learning/). The GitHub Pages edition loads the lessons and figures published with the website. Refresh the page after a release to get the new edition. The local reader also supports downloading verified lesson updates.
+[Open the multilingual textbook](https://doczrz.github.io/bioinformatics-learning/). The GitHub Pages edition loads the lessons and figures published with the website. Refresh the page after a release to get the new edition. The local reader also supports downloading verified lesson updates.
 
 ## Local preview
 
@@ -24,16 +24,16 @@ The production artifact is `web/dist/`. Publish that directory through HTTPS. Co
 
 The local reader uses `public/content/site-config.json` for its UI version and `contentManifestUrl`. The current URL points to the stable release manifest in this public repository. Bundled content remains readable when GitHub is unavailable.
 
-A configured manifest must be publicly readable over HTTPS from GitHub. Its content assets must use immutable release-tag or commit URLs, include byte sizes and SHA-256 hashes, and provide paired Chinese and English lesson files. The browser never contains a GitHub token. A learner explicitly confirms an update before any content assets are downloaded; the previous verified IndexedDB release remains active if verification fails.
+A configured manifest must be publicly readable over HTTPS from GitHub. Its content assets must use immutable release-tag or commit URLs, include byte sizes and SHA-256 hashes, and provide a lesson file for each language declared in the course index. The browser never contains a GitHub token. A learner explicitly confirms an update before any content assets are downloaded; the previous verified IndexedDB release remains active if verification fails.
 
 The current project uses this public repository as its content source. Publishing a content update is a two-commit process so that every downloaded asset can be pinned to an immutable Git commit:
 
-1. Update `public/content/dev/course.json` and the paired lesson and figure files, increment `contentVersion`, verify the application, and commit those changes.
+1. Update `public/content/dev/course.json` and the lesson and figure files for each course language, increment `contentVersion`, verify the application, and commit those changes.
 2. Copy the full 40-character content commit SHA printed by `git rev-parse HEAD`.
 3. Generate the stable manifest from the committed Git blobs, not from Windows working-tree bytes:
 
    ```powershell
-   node web/scripts/generate-content-manifest.mjs <content-commit-sha> "中文更新摘要" "English release summary"
+   node web/scripts/generate-content-manifest.mjs <content-commit-sha> "中文更新摘要" "English release summary" "Nederlandse samenvatting" "Résumé français" "Resumen en español" "Deutsche Zusammenfassung"
    ```
 
 4. Inspect `public/content/release-manifest.json`, commit it and tag that commit `content-v<version>`. Push both commits and the tag once approved. The stable manifest follows `master`, while every asset URL inside it remains pinned to the earlier content commit SHA. Pushing the release tag triggers publication of the website.

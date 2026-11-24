@@ -1,10 +1,16 @@
-export type Language = "zh" | "en";
+export const LANGUAGES = ["zh", "en", "nl", "fr", "es", "de"] as const;
+export type Language = (typeof LANGUAGES)[number];
+export type LocalizedText = Record<"zh" | "en", string> & Partial<Record<Language, string>>;
+
+export function isLanguage(value: unknown): value is Language {
+  return LANGUAGES.some((language) => language === value);
+}
 
 export interface LessonSummary {
   id: string;
   order: number;
   number?: string;
-  title: Record<Language, string>;
+  title: LocalizedText;
 }
 
 export interface CourseIndex {
@@ -13,7 +19,8 @@ export interface CourseIndex {
   contentVersion: string;
   revision: number;
   defaultLanguage: Language;
-  title: Record<Language, string>;
+  languages?: readonly Language[];
+  title: LocalizedText;
   lessons: LessonSummary[];
 }
 
@@ -31,7 +38,7 @@ export interface LessonPayload {
 
 export interface DatasetEntry {
   id: string;
-  title: Record<Language, string>;
+  title: LocalizedText;
   sourceUrl: string;
   sizeBytes?: number;
   license?: string;
@@ -57,7 +64,7 @@ export interface ContentReleaseManifest {
   releaseTag: string;
   commitSha: string;
   minimumUiVersion: string;
-  summary: Record<Language, string>;
+  summary: LocalizedText;
   assets: ContentReleaseAsset[];
 }
 
@@ -69,5 +76,5 @@ export interface UpdateCheckResult {
   compatible?: boolean;
   minimumUiVersion?: string;
   downloadBytes?: number;
-  summary?: Record<Language, string>;
+  summary?: LocalizedText;
 }

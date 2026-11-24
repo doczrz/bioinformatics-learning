@@ -1,6 +1,6 @@
 # Bioinformatics Interactive Learning
 
-> An open-source bilingual interactive textbook for beginners in bioinformatics.
+> An open-source multilingual interactive textbook for beginners in bioinformatics.
 
 [中文](README.md) | [English](README.en.md)
 
@@ -16,7 +16,7 @@ During active development, I will aim to publish tutorial updates approximately 
 
 Current boundaries:
 
-- Whole-page Chinese/English switching, lesson navigation, Markdown, code blocks, images, and external data links are supported.
+- Chinese, English, Dutch, French, Spanish, and German editions with whole-page language switching, lesson navigation, Markdown, code blocks, images, and external data links are supported.
 - When running the reader locally, use “Check for updates” to get newly released course content.
 - Reading the textbook does not require ChatGPT or a Codex plugin; the webpage itself does not execute R, Python, or SSH commands.
 
@@ -195,7 +195,7 @@ The production files are written to `web/dist/` and can be deployed to any stati
 
 ```text
 web/                         Standalone Vite/React textbook reader
-web/public/content/dev/      Bilingual course content bundled with the webpage
+web/public/content/dev/      Multilingual course content bundled with the webpage
 src/codex_textbook/          Course validation and content-release tooling
 datasets/                    Dataset catalogue and source metadata
 ```

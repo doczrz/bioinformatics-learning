@@ -62,6 +62,7 @@ export class StaticContentProvider implements ContentProvider {
       contentVersion: course.contentVersion,
       revision: course.revision,
       defaultLanguage: course.defaultLanguage,
+      languages: course.languages,
       title: course.title,
       lessons: [...course.lessons].sort((left, right) => left.order - right.order),
     };
@@ -89,7 +90,7 @@ export class StaticContentProvider implements ContentProvider {
         lessonId,
         language,
         translationAvailable: false,
-        title: summary.title[language],
+        title: summary.title[language] ?? summary.title.en,
         markdown: "",
         sections: [],
       };
@@ -105,7 +106,7 @@ export class StaticContentProvider implements ContentProvider {
       lessonId,
       language,
       translationAvailable: true,
-      title: summary.title[language],
+      title: summary.title[language] ?? summary.title.en,
       markdown,
       sections: parseSections(markdown),
     };

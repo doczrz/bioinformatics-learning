@@ -1,4 +1,4 @@
-# 打开双语交互教材 / Open the bilingual textbook
+# 打开多语言交互教材 / Open the multilingual textbook
 
 [在线阅读教材 / Read the textbook online](https://doczrz.github.io/bioinformatics-learning/)
 
@@ -20,7 +20,7 @@ pnpm --dir web preview
 
 The textbook is now a standalone full-viewport browser page. Open the local URL printed by Vite, or publish `web/dist` through HTTPS.
 
-页面支持整页中英文切换、章节导航、复制代码和外部数据链接。用户安装的 Chrome AI 侧栏可独立用于框选后提问；教材本身不会自动发送所选文本。
+页面支持中文、英语、荷兰语、法语、西班牙语和德语整页切换、章节导航、复制代码和外部数据链接。用户安装的 Chrome AI 侧栏可独立用于框选后提问；教材本身不会自动发送所选文本。
 
 The page supports whole-page language switching, lesson navigation, code copying, and authoritative external dataset links. An installed Chrome AI sidebar can be used independently for questions; the textbook does not send selected text itself.
 

@@ -257,14 +257,10 @@ export class ContentUpdateService implements ContentUpdateClient {
       throw new Error("course.json does not match the checked content release.");
     }
     for (const lesson of course.lessons) {
-      const zhPath = `lessons/${lesson.id}.zh.md`;
-      const enPath = `lessons/${lesson.id}.en.md`;
-      const zhBytes = assets[zhPath];
-      const enBytes = assets[enPath];
-      if (!zhBytes || !enBytes) {
-        throw new Error(`Missing paired lesson asset: ${lesson.id}`);
-      }
-      for (const [path, bytes] of [[zhPath, zhBytes], [enPath, enBytes]] as const) {
+      for (const language of course.languages) {
+        const path = `lessons/${lesson.id}.${language}.md`;
+        const bytes = assets[path];
+        if (!bytes) throw new Error(`Missing lesson asset: ${path}`);
         const markdown = decodeLesson(bytes, path);
         for (const imagePath of localMarkdownImagePaths(markdown)) {
           if (!assets[imagePath]) {

@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import type { ContentProvider } from "../content/content-provider";
 import { parseSections } from "../content/markdown";
 import type { Language, LessonPayload } from "../contracts";
+import { messages } from "../i18n";
 import { CodeBlock } from "./CodeBlock";
 import { LessonFigure } from "./LessonFigure";
 import "../styles/reader.css";
@@ -21,16 +22,14 @@ export function LessonReader({
   language,
   contentProvider,
 }: LessonReaderProps) {
-  const isChinese = language === "zh";
+  const t = messages[language];
 
   if (!lesson.translationAvailable) {
     return (
       <main className="lesson-reader translation-missing" id="lesson-content">
         <h1>{lesson.title}</h1>
         <p>
-          {isChinese
-            ? "本课暂未提供中文版本。"
-            : "This lesson is not yet available in English."}
+          {t.translationMissing}
         </p>
       </main>
     );
@@ -83,7 +82,7 @@ export function LessonReader({
           },
           code: ({ children }) => <code className="inline-code">{children}</code>,
           table: ({ children }) => (
-            <div className="lesson-table-wrap" tabIndex={0} role="region" aria-label={isChinese ? "表格" : "Table"}>
+            <div className="lesson-table-wrap" tabIndex={0} role="region" aria-label={t.table}>
               <table>{children}</table>
             </div>
           ),

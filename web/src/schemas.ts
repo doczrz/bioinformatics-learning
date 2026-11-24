@@ -1,10 +1,15 @@
 import { z } from "zod";
+import { LANGUAGES } from "./contracts";
 
-export const languageSchema = z.enum(["zh", "en"]);
+export const languageSchema = z.enum(LANGUAGES);
 
 const translatedTitleSchema = z.object({
   zh: z.string().min(1),
   en: z.string().min(1),
+  nl: z.string().min(1).optional(),
+  fr: z.string().min(1).optional(),
+  es: z.string().min(1).optional(),
+  de: z.string().min(1).optional(),
 });
 
 export const lessonSummarySchema = z.object({
@@ -29,9 +34,24 @@ export const courseFileSchema = z.object({
   contentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
   revision: z.number().int().nonnegative(),
   defaultLanguage: languageSchema,
+  languages: languageSchema.array().min(1).default(["zh", "en"]),
   title: translatedTitleSchema,
   lessons: z.array(lessonSummarySchema).min(1),
   datasets: z.array(datasetEntrySchema).default([]),
+}).superRefine((course, context) => {
+  if (!course.languages.includes(course.defaultLanguage) ||
+      new Set(course.languages).size !== course.languages.length) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["languages"],
+      message: "List each course language once, including the default language." });
+  }
+  const titles = [course.title, ...course.lessons.map((lesson) => lesson.title),
+    ...course.datasets.map((dataset) => dataset.title)];
+  for (const language of course.languages) {
+    if (titles.some((title) => !title[language]?.trim())) {
+      context.addIssue({ code: z.ZodIssueCode.custom,
+        message: `Missing course, lesson or dataset title in ${language}.` });
+    }
+  }
 });
 
 export const siteConfigSchema = z.object({

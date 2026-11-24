@@ -1,4 +1,4 @@
-import type { Language } from "../contracts";
+import { isLanguage, type Language } from "../contracts";
 
 export interface ReaderState {
   language: Language;
@@ -46,7 +46,7 @@ function normalize(value: unknown): ReaderState {
   }
   const candidate = value as Record<string, unknown>;
   return {
-    language: candidate.language === "en" || candidate.language === "zh"
+    language: isLanguage(candidate.language)
       ? candidate.language
       : defaultReaderState.language,
     lessonId: validId(candidate.lessonId),

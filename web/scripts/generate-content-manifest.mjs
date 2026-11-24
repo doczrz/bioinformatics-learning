@@ -44,7 +44,7 @@ function rawUrl(commitSha, path) {
   return `https://raw.githubusercontent.com/${REPOSITORY}/${commitSha}/${encoded}`;
 }
 
-const [commitRef = "HEAD", summaryZh, summaryEn] = process.argv.slice(2);
+const [commitRef = "HEAD", ...summaries] = process.argv.slice(2);
 const commitSha = gitText(["rev-parse", `${commitRef}^{commit}`]);
 if (!/^[a-f0-9]{40}$/.test(commitSha)) {
   throw new Error(`Expected a full commit SHA, received: ${commitSha}`);
@@ -82,13 +82,25 @@ if (!/^\d+\.\d+\.\d+$/.test(course.contentVersion ?? "")) {
 if (!Array.isArray(course.lessons) || course.lessons.length === 0) {
   throw new Error("course.json must contain at least one lesson.");
 }
+const languages = course.languages ?? ["zh", "en"];
+if (!Array.isArray(languages) || !languages.includes(course.defaultLanguage) ||
+    new Set(languages).size !== languages.length ||
+    languages.some((lang) => !/^[a-z]{2}$/.test(lang) || !course.title[lang]?.trim())) {
+  throw new Error("Invalid course languages or missing translated course title.");
+}
 for (const lesson of course.lessons) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(lesson.id ?? "")) {
     throw new Error("course.json contains an invalid lesson id.");
   }
-  for (const language of ["zh", "en"]) {
+  for (const language of languages) {
     const path = `lessons/${lesson.id}.${language}.md`;
-    if (!assetPaths.includes(path)) throw new Error(`Missing paired lesson asset: ${path}`);
+    if (!lesson.title[language]?.trim()) throw new Error(`Missing ${language} title for ${lesson.id}`);
+    if (!assetPaths.includes(path)) throw new Error(`Missing translated lesson: ${path}`);
+  }
+}
+for (const dataset of course.datasets ?? []) {
+  if (languages.some((lang) => !dataset.title[lang]?.trim())) {
+    throw new Error(`Missing translated dataset title for ${dataset.id}.`);
   }
 }
 
@@ -116,10 +128,9 @@ const manifest = {
   releaseTag: `content-v${course.contentVersion}`,
   commitSha,
   minimumUiVersion: siteConfig.uiVersion,
-  summary: {
-    zh: summaryZh ?? `课程内容 ${course.contentVersion}`,
-    en: summaryEn ?? `Course content ${course.contentVersion}`,
-  },
+  summary: Object.fromEntries(languages.map((language, index) => [
+    language, summaries[index] ?? `${course.title[language]} · ${course.contentVersion}`,
+  ])),
   assets,
 };
 

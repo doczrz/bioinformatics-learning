@@ -144,6 +144,7 @@ export class CachedContentProvider implements ContentProvider {
       contentVersion: this.course.contentVersion,
       revision: this.course.revision,
       defaultLanguage: this.course.defaultLanguage,
+      languages: this.course.languages,
       title: this.course.title,
       lessons: [...this.course.lessons].sort((left, right) => left.order - right.order),
     };
@@ -166,7 +167,7 @@ export class CachedContentProvider implements ContentProvider {
         lessonId,
         language,
         translationAvailable: false,
-        title: summary.title[language],
+        title: summary.title[language] ?? summary.title.en,
         markdown: "",
         sections: [],
       };
@@ -179,7 +180,7 @@ export class CachedContentProvider implements ContentProvider {
       lessonId,
       language,
       translationAvailable: true,
-      title: summary.title[language],
+      title: summary.title[language] ?? summary.title.en,
       markdown,
       sections: parseSections(markdown),
     };

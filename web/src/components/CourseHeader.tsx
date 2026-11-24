@@ -1,4 +1,5 @@
-import type { CourseIndex, Language } from "../contracts";
+import { isLanguage, LANGUAGES, type CourseIndex, type Language } from "../contracts";
+import { languageNames, messages } from "../i18n";
 import "../styles/masthead.css";
 
 interface CourseHeaderProps {
@@ -28,11 +29,10 @@ export function CourseHeader({
   onCheckForUpdates,
   checkingForUpdates,
 }: CourseHeaderProps) {
-  const isChinese = language === "zh";
-  const contentsLabel = isChinese ? "课程目录" : "Course contents";
-  const updateLabel = checkingForUpdates
-    ? (isChinese ? "正在检查…" : "Checking…")
-    : (isChinese ? "检查更新" : "Check for updates");
+  const t = messages[language];
+  const contentsLabel = t.contents;
+  const updateLabel = checkingForUpdates ? t.checking : t.checkUpdates;
+  const offered = course.languages ?? LANGUAGES;
   return (
     <header className="course-masthead">
       <div className="masthead-inner">
@@ -54,17 +54,20 @@ export function CourseHeader({
         </button>
         <span className="masthead-version">v{course.contentVersion}</span>
         <div className="masthead-actions">
-          <div className="masthead-languages" role="group" aria-label={isChinese ? "教材语言" : "Textbook language"}>
-            <button type="button" lang="en" aria-label="English" aria-pressed={!isChinese} onClick={() => onLanguageChange("en")}>
-              <span className="lang-full">English</span><span className="lang-short">EN</span>
-            </button>
-            <button type="button" lang="zh" aria-pressed={isChinese} onClick={() => onLanguageChange("zh")}>中文</button>
-          </div>
+          <select className="masthead-language" aria-label={t.language} value={language}
+            onChange={(event) => {
+              const next = event.currentTarget.value;
+              if (isLanguage(next)) onLanguageChange(next);
+            }}>
+            {LANGUAGES.filter((code) => offered.includes(code) || code === language).map((code) => (
+              <option key={code} value={code} lang={code}>{languageNames[code]}</option>
+            ))}
+          </select>
           <button
             className="masthead-theme"
             type="button"
-            aria-label={isChinese ? "深色模式" : "Dark mode"}
-            title={isChinese ? "深色模式" : "Dark mode"}
+            aria-label={t.darkMode}
+            title={t.darkMode}
             aria-pressed={theme === "dark"}
             onClick={onToggleTheme}
           >

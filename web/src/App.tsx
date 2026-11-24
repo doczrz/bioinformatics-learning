@@ -14,6 +14,9 @@ import { DatasetPanel } from "./components/DatasetPanel";
 import { LessonReader } from "./components/LessonReader";
 import { LessonSidebar } from "./components/LessonSidebar";
 import { UpdateDialog } from "./components/UpdateDialog";
+import { ReaderError, readerProblem, type ReaderProblem } from "./components/ReaderError";
+import { messages } from "./i18n";
+import { languageInUrl, readingHref } from "./reader-location";
 import {
   type BrowserStateStore,
   type ReaderState,
@@ -48,21 +51,24 @@ export function TextbookApp({
   stateStore,
   updateService,
 }: TextbookAppProps) {
-  const initialState = useMemo(() => stateStore.read(), [stateStore]);
+  const initialState = useMemo(() => {
+    const saved = stateStore.read();
+    return { ...saved, language: languageInUrl(window.location.search) ?? saved.language };
+  }, [stateStore]);
   const [readerState, setReaderState] = useState<ReaderState>(initialState);
   const [requestedLesson, setRequestedLesson] = useState(() => lessonInUrl(initialState.lessonId));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [course, setCourse] = useState<CourseIndex | null>(null);
   const [lesson, setLesson] = useState<LessonPayload | null>(null);
   const [datasets, setDatasets] = useState<DatasetEntry[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ReaderProblem | null>(null);
   const [theme, setTheme] = useState<Theme>(preferredTheme);
   const [updateResult, setUpdateResult] = useState<UpdateCheckResult | null>(null);
   const [checkingForUpdates, setCheckingForUpdates] = useState(false);
   const [applyingUpdate, setApplyingUpdate] = useState(false);
-  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [updateError, setUpdateError] = useState<ReaderProblem | null>(null);
   const language = readerState.language;
-  const zh = language === "zh";
+  const t = messages[language];
   const selected = requestedLesson === "" ? course?.lessons[0]
     : course?.lessons.find((entry) => entry.id === requestedLesson);
   const currentLesson = lesson && lesson.lessonId === selected?.id && lesson.language === language ? lesson : null;
@@ -78,13 +84,21 @@ export function TextbookApp({
   }, [readerState, stateStore]);
 
   useEffect(() => {
+    // Keep the initial language in history when arriving through an older, language-neutral URL.
+    if (!languageInUrl(window.location.search)) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", initialState.language);
+      window.history.replaceState(window.history.state, "", url);
+    }
     const syncLocation = () => {
       setRequestedLesson(lessonInUrl(stateStore.read().lessonId));
+      const next = languageInUrl(window.location.search);
+      if (next) setReaderState((state) => state.language === next ? state : { ...state, language: next });
       setSidebarOpen(false);
     };
     window.addEventListener("popstate", syncLocation);
     return () => window.removeEventListener("popstate", syncLocation);
-  }, [stateStore]);
+  }, [stateStore, initialState]);
 
   useEffect(() => {
     if (!sidebarOpen) return;
@@ -104,11 +118,10 @@ export function TextbookApp({
   }
 
   useEffect(() => {
-    document.documentElement.lang = readerState.language;
-    document.title = readerState.language === "zh"
-      ? "Biolearning · 双语交互教材"
-      : "Biolearning · Bilingual interactive textbook";
-  }, [readerState.language]);
+    document.documentElement.lang = language;
+    document.title = `Biolearning · ${t.textbook}`;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", t.catalogIntro);
+  }, [language, t]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -123,9 +136,7 @@ export function TextbookApp({
         setCourse(nextCourse);
       } catch (caught) {
         if (!active) return;
-        setError(
-          caught instanceof Error ? caught.message : "The course could not be opened.",
-        );
+        setError(readerProblem("courseError", caught));
       }
     }
     void openCourse();
@@ -152,7 +163,7 @@ export function TextbookApp({
         setDatasets(nextDatasets);
         setReaderState((state) => state.lessonId === id ? state : { ...state, lessonId: id });
       } catch (caught) {
-        if (active) setError(caught instanceof Error ? caught.message : "The lesson could not be loaded.");
+        if (active) setError(readerProblem("lessonError", caught));
       }
     }
     void readLesson(selected.id);
@@ -165,16 +176,16 @@ export function TextbookApp({
     if (target) target.scrollIntoView();
   }, [lesson, selected]);
 
-  function changeLanguage(language: Language) {
-    setReaderState((state) => ({ ...state, language }));
+  function changeLanguage(next: Language) {
+    if (next === language) return;
+    const href = readingHref(selected?.id ?? requestedLesson, next, window.location.search);
+    window.history.pushState(null, "", href);
+    setReaderState((state) => ({ ...state, language: next }));
     setSidebarOpen(false);
   }
 
   function navigate(lessonId: string | null) {
-    const url = new URL(window.location.href);
-    if (lessonId) url.searchParams.set("lesson", lessonId);
-    else url.searchParams.delete("lesson");
-    url.hash = "";
+    const url = new URL(readingHref(lessonId, language, window.location.search), window.location.href);
     if (url.href !== window.location.href) window.history.pushState(null, "", url);
     setRequestedLesson(lessonId);
     setSidebarOpen(false);
@@ -194,9 +205,7 @@ export function TextbookApp({
         updateAvailable: false,
         currentVersion: course.contentVersion,
       });
-      setUpdateError(
-        caught instanceof Error ? caught.message : "Could not check for updates.",
-      );
+      setUpdateError(readerProblem("checkError", caught));
     } finally {
       setCheckingForUpdates(false);
     }
@@ -217,9 +226,7 @@ export function TextbookApp({
       if (selected && !nextCourse.lessons.some((entry) => entry.id === selected.id)) navigate(null);
       setUpdateResult(null);
     } catch (caught) {
-      setUpdateError(
-        caught instanceof Error ? caught.message : "Could not apply the update.",
-      );
+      setUpdateError(readerProblem("applyError", caught));
     } finally {
       setApplyingUpdate(false);
     }
@@ -230,12 +237,10 @@ export function TextbookApp({
       <main
         className="connection-state"
         data-theme={theme}
-        aria-label="Bilingual interactive textbook"
+        aria-label={t.textbook}
       >
         <span className="sequence-mark" aria-hidden="true" />
-        <p>
-          {error ?? (readerState.language === "zh" ? "正在打开教材…" : "Opening textbook…")}
-        </p>
+        {error ? <ReaderError problem={error} language={language} /> : <p role="status">{t.openTextbook}</p>}
       </main>
     );
   }
@@ -274,22 +279,22 @@ export function TextbookApp({
           />
           {sidebarOpen && (
             <button type="button" className="drawer-backdrop" tabIndex={-1}
-              aria-label={zh ? "关闭课程目录" : "Close course contents"} onClick={closeSidebar} />
+              aria-label={t.closeContents} onClick={closeSidebar} />
           )}
           <div className="reading-canvas">
             <div className="reader-tools">
-              <nav className="reader-trail" aria-label={zh ? "当前位置" : "Breadcrumb"}>
-                <a href={window.location.pathname} onClick={(event) => {
+              <nav className="reader-trail" aria-label={t.breadcrumb}>
+                <a href={readingHref(null, language)} onClick={(event) => {
                   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
                   event.preventDefault();
                   navigate(null);
-                }}>{zh ? "课程目录" : "Course catalog"}</a>
+                }}>{t.catalog}</a>
                 <span aria-hidden="true">/</span>
-                <span>{zh ? "第 " : "Lesson "}{selected.number ?? selected.order}{zh ? " 节" : ""}</span>
+                <span>{t.lessonNumber.replace("{n}", String(selected.number ?? selected.order))}</span>
               </nav>
               {headings.length > 0 && (
                 <details className="section-menu" key={selected.id + language}>
-                  <summary>{zh ? "本课小节" : "On this page"}</summary>
+                  <summary>{t.onThisPage}</summary>
                   <ul>
                     {headings.map((section) => (
                       <li key={section.id}>
@@ -302,13 +307,13 @@ export function TextbookApp({
                 </details>
               )}
             </div>
-            {error ? <p className="inline-error" role="alert">{error}</p>
+            {error ? <ReaderError problem={error} language={language} />
               : currentLesson ? (
                 <>
                   <LessonReader lesson={currentLesson} language={language} contentProvider={contentProvider} />
                   <DatasetPanel datasets={datasets} language={language} />
                 </>
-              ) : <p className="lesson-loading" role="status">{zh ? "正在读取课程…" : "Opening lesson…"}</p>}
+              ) : <p className="lesson-loading" role="status">{t.openLesson}</p>}
           </div>
         </div>
       )}
